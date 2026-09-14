@@ -630,6 +630,7 @@
       </form>
     </div>
     <div class="modal-footer">
+      <button class="btn" id="btnAdicionarItensCarga" style="margin-right:auto;">Adicionar itens a esta carga</button>
       <button class="btn btn-danger" id="btnExcluirCarga">Excluir carga inteira</button>
       <button class="btn" id="cancelModalCarga">Cancelar</button>
       <button class="btn btn-primary" id="salvarModalCarga">Salvar alterações</button>
@@ -1333,6 +1334,7 @@
                 '<span class="carga-meta">'+grupo.itens.length+(grupo.itens.length===1?" item":" itens")+' · sobra '+sobraTotal+'</span>'+
                 (statusCarga ? '<span class="badge '+stClass+'">'+escapeHtml(statusCarga)+'</span>' : '')+
               '</button>'+
+              '<button type="button" class="icon-btn carga-edit-btn" title="Adicionar mais itens a esta carga" data-add-itens="'+cargaId+'">➕</button>'+
               '<button type="button" class="icon-btn carga-edit-btn" title="Editar fornecedor, nº e data da carga" data-edit-carga="'+cargaId+'">✎</button>'+
             '</div>'+
             (expandido ? '<div class="carga-items-wrap">'+renderItensDaCargaConsulta(grupo.itens)+'</div>' : '')+
@@ -1510,6 +1512,17 @@
     document.getElementById("itSobra").value = "0";
   }
 
+  function adicionarItensCarga(cargaId){
+    var carga = getCarga(cargaId);
+    if(!carga) return;
+    currentCargaId = cargaId;
+    saveDraft();
+    switchTab("cadastro");
+    renderCargaAtivaBar();
+    toast('Carga de '+(carga.fornecedor||"—")+' selecionada. Adicione os novos itens abaixo.');
+    document.getElementById("itPlu").focus();
+  }
+
   /* ============ Eventos: Carga ============ */
   document.getElementById("cargaForm").addEventListener("submit", function(e){
     e.preventDefault();
@@ -1631,6 +1644,8 @@
     if(delRef){ var d = delRef.split("|"); excluirItem(d[0], d[1]); }
     var editCargaBtn = e.target.closest("[data-edit-carga]");
     if(editCargaBtn){ abrirModalCarga(editCargaBtn.getAttribute("data-edit-carga")); return; }
+    var addItensBtn = e.target.closest("[data-add-itens]");
+    if(addItensBtn){ adicionarItensCarga(addItensBtn.getAttribute("data-add-itens")); return; }
     var toggleBtn = e.target.closest("[data-toggle-carga]");
     if(toggleBtn){
       var cargaId = toggleBtn.getAttribute("data-toggle-carga");
@@ -1846,6 +1861,13 @@
     });
     saveState();
     toast("Dados da carga atualizados.");
+  });
+
+  document.getElementById("btnAdicionarItensCarga").addEventListener("click", function(){
+    var cargaId = editCargaRef && editCargaRef.cargaId;
+    if(!cargaId) return;
+    fecharModalCarga();
+    adicionarItensCarga(cargaId);
   });
 
   document.getElementById("btnExcluirCarga").addEventListener("click", function(){
