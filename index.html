@@ -1172,8 +1172,16 @@
       }).join("") + '</tbody></table></div>';
   }
 
+  function cargaDentroFiltroData(carga){
+    if(filters.dataDe && (carga.dataRecebimento||"") < filters.dataDe) return false;
+    if(filters.dataAte && (carga.dataRecebimento||"") > filters.dataAte) return false;
+    return true;
+  }
+
   function renderStats(){
-    var cargasComItens = state.cargas.filter(function(c){ return Array.isArray(c.itens) && c.itens.length>0; });
+    var cargasComItens = state.cargas.filter(function(c){
+      return Array.isArray(c.itens) && c.itens.length>0 && cargaDentroFiltroData(c);
+    });
     var totalCargas = cargasComItens.length;
     var porStatus = {};
     cargasComItens.forEach(function(c){
@@ -1184,8 +1192,9 @@
       return '<div class="stat-chip"><b class="num">'+porStatus[st]+'</b><small>'+escapeHtml(st)+'</small></div>';
     }).join("");
     var el = document.getElementById("statsRow");
+    el.title = "Contagem referente ao período selecionado em Consultar cargas (Data de / Data até)";
     el.innerHTML =
-      '<button type="button" class="stat-chip stat-action" data-open-resumo-cargas><b class="num">'+totalCargas+'</b><small>cargas</small></button>'+
+      '<button type="button" class="stat-chip stat-action" data-open-resumo-cargas><b class="num">'+totalCargas+'</b><small>cargas no período</small></button>'+
       chipsStatus;
   }
 
@@ -1272,6 +1281,7 @@
   }
 
   function renderConsulta(){
+    renderStats();
     var rows = applyFilters(getFlatRows());
 
     var tbody = document.getElementById("tbodyConsulta");
