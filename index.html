@@ -1069,7 +1069,8 @@
       var draft = JSON.parse(raw);
       if(draft.currentCargaId && getCarga(draft.currentCargaId)) currentCargaId = draft.currentCargaId;
       if(draft.carga){
-        document.getElementById("cgData").value = draft.carga.data || todayISO();
+        // cgData fica de fora de propósito: a data de recebimento sempre começa na data atual
+        // (já definida no init()), nunca com uma data antiga esquecida num rascunho.
         document.getElementById("cgNumero").value = draft.carga.numero || "";
         document.getElementById("cgFornecedor").value = draft.carga.fornecedor || "";
       }
