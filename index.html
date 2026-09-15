@@ -762,6 +762,7 @@
   var unsubscribeFornecedores = null;
   var CARGAS_COLLECTION = "cargas";
   var FORNECEDORES_DOC_PATH = "meta/fornecedores";
+  var fornecedoresDirty = false; // só sincroniza meta/fornecedores no Firebase quando a lista realmente muda
   var filters = { dataDe:"", dataAte:"", descricao:"", fornecedor:"", tipoCarga:"", nfDevolucao:"" };
 
   /* ============ Utilidades ============ */
@@ -795,11 +796,13 @@
     if(!nome || fornecedorExiste(nome)) return false;
     state.fornecedores.push(nome);
     state.fornecedores.sort(function(a,b){ return a.localeCompare(b,"pt-BR"); });
+    fornecedoresDirty = true;
     return true;
   }
   function removerFornecedor(nome){
     if(!confirm('Remover "'+nome+'" da lista de fornecedores? Cargas já cadastradas com esse nome não são afetadas.')) return;
     state.fornecedores = state.fornecedores.filter(function(f){ return f!==nome; });
+    fornecedoresDirty = true;
     saveState();
     toast("Fornecedor removido da lista.");
   }
@@ -812,6 +815,7 @@
     if(fornecedorExiste(novoNome)){ toast("Já existe um fornecedor com esse nome.", true); return; }
     state.fornecedores = state.fornecedores.map(function(f){ return f===nomeAntigo ? novoNome : f; })
       .sort(function(a,b){ return a.localeCompare(b,"pt-BR"); });
+    fornecedoresDirty = true;
     var cargasAtualizadas = 0;
     state.cargas.forEach(function(c){
       if(c.fornecedor===nomeAntigo){ c.fornecedor = novoNome; cargasAtualizadas++; syncCargaHeaderRemote(c.id, { fornecedor: novoNome }); }
@@ -855,7 +859,10 @@
   }
   function saveState(){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    syncFornecedoresRemote();
+    if(fornecedoresDirty){
+      syncFornecedoresRemote();
+      fornecedoresDirty = false;
+    }
     renderAll();
   }
 
@@ -865,6 +872,13 @@
     try{
       firebase.initializeApp(config);
       firestoreDb = firebase.firestore();
+      // Cache local (IndexedDB): ao recarregar a página, os dados já conhecidos vêm do
+      // cache em vez de gerar leitura no Firestore; só o que mudou de fato é lido do servidor.
+      try{
+        firestoreDb.enablePersistence({synchronizeTabs:true}).catch(function(err){
+          console.warn("Persistência offline do Firestore indisponível:", err && err.code);
+        });
+      }catch(e){}
       return true;
     }catch(err){
       console.error("Falha ao configurar o Firebase:", err);
