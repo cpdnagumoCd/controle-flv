@@ -58,6 +58,7 @@ Se você já tem cargas cadastradas (vindas do armazenamento local ou do Supabas
    - `.gitignore`
    - `.nojekyll` (arquivo vazio — evita que o GitHub tente processar o site como Jekyll)
    - `firebase-config.js`
+   - pasta `assets/` (logos e favicon da Nagumo)
    - `firestore.rules` (só de referência — as regras de verdade ficam no console do Firebase, não neste arquivo)
    - `README.md`
 
@@ -72,7 +73,7 @@ Se você já tem cargas cadastradas (vindas do armazenamento local ou do Supabas
 
 ```powershell
 git init
-git add index.html .gitignore .nojekyll firebase-config.js firestore.rules README.md
+git add index.html assets .gitignore .nojekyll firebase-config.js firestore.rules README.md
 git commit -m "Publicar aplicacao com Firebase"
 git branch -M main
 git remote add origin https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git

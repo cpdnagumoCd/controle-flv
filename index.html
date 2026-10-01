@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Controle de Cargas FLV — Nagumo</title>
+<meta name="theme-color" content="#003567">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/logo-n.png">
 <script>
 (function(){
   try{
@@ -17,7 +20,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
@@ -56,8 +59,8 @@
 
     --focus:0 0 0 3px rgba(0,74,143,.2);
     --backdrop:rgba(10,20,35,.5);
-    --radius:12px;
-    --radius-sm:8px;
+    --radius:16px;
+    --radius-sm:10px;
     --shadow:0 1px 3px rgba(16,24,40,.06), 0 1px 2px rgba(16,24,40,.04);
     --shadow-md:0 6px 16px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.05);
     --shadow-lg:0 20px 48px rgba(0,32,61,.22), 0 6px 14px rgba(0,32,61,.1);
@@ -113,11 +116,12 @@
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:14px;
+    font-family:"Nunito",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:14.5px;
     line-height:1.45;
     -webkit-font-smoothing:antialiased;
   }
+  h1,h2,h3,.kpi-value,.brand-app{font-family:"Nunito",-apple-system,"Segoe UI",sans-serif;}
   button,input,select,textarea{font-family:inherit;}
   :focus-visible{outline:2px solid var(--brand);outline-offset:2px;}
   .num{font-variant-numeric:tabular-nums;}
@@ -129,22 +133,29 @@
   /* ================= Shell ================= */
   .app{display:grid;grid-template-columns:var(--sidebar-w) minmax(0,1fr);min-height:100vh;}
   .sidebar{
-    position:sticky;top:0;height:100vh;z-index:30;
+    position:sticky;top:0;height:100vh;z-index:30;overflow:hidden;
     display:flex;flex-direction:column;gap:18px;
-    padding:20px 14px;
+    padding:22px 14px 20px;
     background:linear-gradient(180deg,var(--sidebar-bg) 0%,var(--sidebar-bg-2) 100%);
     color:var(--sidebar-text);
   }
-  .brand{display:flex;align-items:center;gap:11px;padding:2px 8px 18px;border-bottom:1px solid var(--sidebar-border);}
-  .brand-mark{
-    width:40px;height:40px;border-radius:10px;flex:none;
-    display:grid;place-items:center;
-    background:#fff;color:#003567;font-weight:800;font-size:13px;letter-spacing:.4px;
-    box-shadow:inset 0 -3px 0 #F80035;
+  /* Bolha vermelha da marca, recortada no canto da barra lateral */
+  .sidebar::after{
+    content:"";position:absolute;width:260px;height:260px;border-radius:50%;
+    right:-150px;bottom:-120px;background:#F80035;opacity:.14;pointer-events:none;
   }
-  .brand-text{min-width:0;}
-  .brand-text strong{display:block;color:#fff;font-size:15px;font-weight:700;line-height:1.2;}
-  .brand-text span{font-size:12px;}
+  .sidebar > *{position:relative;z-index:1;}
+  .brand{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:0 8px 18px;border-bottom:1px solid var(--sidebar-border);}
+  .brand-logo{display:flex;align-items:center;gap:11px;}
+  .brand-logo-mark{width:42px;height:42px;flex:none;}
+  .brand-logo-word{display:block;height:24px;width:auto;}
+  .brand-logo-n{display:none;width:36px;height:36px;flex:none;}
+  .brand-app{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:4px 11px 4px 9px;border-radius:999px;
+    background:rgba(255,255,255,.1);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.02em;
+  }
+  .brand-app::before{content:"";width:7px;height:7px;border-radius:50%;background:#F80035;}
 
   .nav{display:flex;flex-direction:column;gap:4px;}
   .nav-item{
@@ -200,7 +211,13 @@
   .tab-panel{display:none;}
   .tab-panel.active{display:block;animation:fadeSlideIn .22s var(--ease);}
   .page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
-  .page-header h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.015em;}
+  .page-header h1{margin:0;font-size:25px;font-weight:900;letter-spacing:-.01em;color:var(--brand-text);}
+  html[data-theme="dark"] .page-header h1{color:var(--text);}
+  .page-eyebrow{
+    display:inline-flex;align-items:center;gap:7px;margin-bottom:4px;
+    font-size:11.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);
+  }
+  .page-eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;}
   .page-header p{margin:4px 0 0;color:var(--muted);font-size:13.5px;}
 
   .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px;}
@@ -261,20 +278,22 @@
 
   /* ================= Buttons ================= */
   .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:7px;height:38px;padding:0 14px;
-    border:1px solid var(--border-strong);border-radius:var(--radius-sm);
-    background:var(--surface);color:var(--text);font-size:13.5px;font-weight:600;white-space:nowrap;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;height:38px;padding:0 16px;
+    border:1px solid var(--border-strong);border-radius:999px;
+    background:var(--surface);color:var(--text);font-size:13.5px;font-weight:700;white-space:nowrap;cursor:pointer;
     transition:background .15s var(--ease),border-color .15s var(--ease),box-shadow .15s var(--ease),transform .1s var(--ease);
   }
   .btn:hover{background:var(--hover);}
   .btn:active{transform:translateY(1px);}
   .btn-primary{background:var(--primary);border-color:var(--primary);color:#fff;}
   .btn-primary:hover{background:var(--primary-hover);border-color:var(--primary-hover);}
+  .btn-accent{background:#F80035;border-color:#F80035;color:#fff;box-shadow:0 4px 12px rgba(248,0,53,.22);}
+  .btn-accent:hover{background:#dc002f;border-color:#dc002f;}
   .btn-danger{color:var(--red);border-color:var(--red);}
   .btn-danger:hover{background:var(--red-bg);}
   .btn-ghost{background:transparent;border-color:transparent;color:var(--text-2);}
   .btn-ghost:hover{background:var(--surface-3);}
-  .btn-sm{height:32px;padding:0 11px;font-size:13px;}
+  .btn-sm{height:32px;padding:0 13px;font-size:13px;}
   .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
   .icon-btn{
     width:32px;height:32px;display:inline-grid;place-items:center;flex:none;
@@ -327,10 +346,17 @@
 
   /* ================= Cadastro ================= */
   .active-carga{
+    position:relative;overflow:hidden;
     display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
-    padding:16px 20px;margin-bottom:18px;border-radius:var(--radius);
+    padding:18px 22px;margin-bottom:18px;border-radius:var(--radius);
     background:linear-gradient(135deg,#003567 0%,#00539f 100%);color:#fff;box-shadow:var(--shadow-md);
   }
+  /* "N" da marca aparecendo no canto do banner */
+  .active-carga::after{
+    content:"";position:absolute;right:-46px;top:50%;width:190px;height:190px;transform:translateY(-50%);
+    background:url("assets/logo-n.png") center/contain no-repeat;opacity:.16;pointer-events:none;
+  }
+  .active-carga > *{position:relative;z-index:1;}
   html[data-theme="dark"] .active-carga{background:linear-gradient(135deg,#123a66 0%,#0f2c4d 100%);border:1px solid #1f4775;}
   .eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.75;}
   .active-carga strong{display:block;font-size:19px;font-weight:700;margin:2px 0 6px;}
@@ -344,6 +370,7 @@
   .active-carga .btn-light{background:#fff;border-color:#fff;color:#003567;}
   .active-carga .btn-light:hover{background:#e8f0f9;}
 
+  .recentes-scroll{max-height:min(48vh,460px);}
   .cadastro-grid{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);align-items:start;}
   .cadastro-grid > .card{margin:0;}
   .itens-scroll{max-height:min(62vh,640px);}
@@ -468,7 +495,7 @@
   .toast{
     position:fixed;left:50%;bottom:20px;z-index:100;max-width:min(92vw,520px);
     transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;
-    padding:11px 16px;border-radius:10px;background:#0b1f36;color:#fff;font-size:13.5px;
+    padding:11px 16px;border-radius:14px;background:#003567;color:#fff;font-size:13.5px;font-weight:600;
     box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .25s ease,transform .25s ease;
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -478,8 +505,10 @@
   @media (max-width:960px){
     .app{grid-template-columns:1fr;}
     .sidebar{height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 14px;}
-    .brand{flex:1;padding:0;border:0;}
-    .brand-mark{width:34px;height:34px;font-size:12px;}
+    .sidebar::after{display:none;}
+    .brand{flex:1;flex-direction:row;align-items:center;gap:10px;padding:0;border:0;}
+    .brand-logo{display:none;}
+    .brand-logo-n{display:block;}
     .sidebar-footer{margin:0;padding:0;border:0;flex-direction:row;align-items:center;gap:8px;}
     .sync-status{padding:0;}
     .sync-status .label{display:none;}
@@ -500,6 +529,7 @@
     .toolbar-group select{min-width:0;flex:1;}
     .toolbar-group{width:100%;}
     .carga-badges{margin-left:0;}
+    .active-carga::after{width:120px;height:120px;right:-44px;top:-30px;transform:none;opacity:.12;}
   }
 </style>
 </head>
@@ -537,11 +567,12 @@
   <!-- ================= Sidebar ================= -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-mark">FLV</div>
-      <div class="brand-text">
-        <strong>Controle de Cargas</strong>
-        <span>Nagumo · Recebimento</span>
+      <div class="brand-logo">
+        <img class="brand-logo-mark" src="assets/logo-n.png" width="256" height="256" alt="">
+        <img class="brand-logo-word" src="assets/logo-nagumo-branco.png" width="539" height="96" alt="Nagumo">
       </div>
+      <img class="brand-logo-n" src="assets/logo-n.png" width="256" height="256" alt="Nagumo">
+      <span class="brand-app">Controle de Cargas FLV</span>
     </div>
 
     <nav class="nav" aria-label="Seções">
@@ -581,6 +612,7 @@
     <section id="tab-cadastro" class="tab-panel active">
       <header class="page-header">
         <div>
+          <span class="page-eyebrow">Recebimento FLV</span>
           <h1>Nova carga</h1>
           <p>Registre a carga do fornecedor e cadastre os itens recebidos.</p>
         </div>
@@ -610,9 +642,24 @@
             </div>
           </div>
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Iniciar cadastro de itens</button>
+            <button type="submit" class="btn btn-accent"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Iniciar cadastro de itens</button>
           </div>
         </form>
+      </div>
+
+      <div class="card" id="recentesCard" hidden>
+        <div class="card-head">
+          <div>
+            <h2>Cargas recentes</h2>
+            <p class="sub">Continue o cadastro de itens de uma carga já iniciada.</p>
+          </div>
+        </div>
+        <div class="table-scroll recentes-scroll">
+          <table>
+            <thead><tr><th>Recebimento</th><th>Fornecedor</th><th class="t-num">Itens</th><th>Status</th><th><span class="sr-only">Ações</span></th></tr></thead>
+            <tbody id="tbodyRecentes"></tbody>
+          </table>
+        </div>
       </div>
 
       <div class="active-carga" id="cargaAtivaBar" hidden>
@@ -652,7 +699,7 @@
             <form id="itemForm">
               <div id="itemFields"></div>
               <div class="form-actions">
-                <button type="submit" class="btn btn-primary"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Adicionar item</button>
+                <button type="submit" class="btn btn-accent"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Adicionar item</button>
                 <button type="button" class="btn" id="btnLimparItem">Limpar campos</button>
               </div>
             </form>
@@ -685,6 +732,7 @@
     <section id="tab-consulta" class="tab-panel">
       <header class="page-header">
         <div>
+          <span class="page-eyebrow">Acompanhamento</span>
           <h1>Consultar cargas</h1>
           <p>Filtre, acompanhe o status e edite as cargas cadastradas.</p>
         </div>
@@ -748,6 +796,7 @@
     <section id="tab-fornecedores" class="tab-panel">
       <header class="page-header">
         <div>
+          <span class="page-eyebrow">Cadastros</span>
           <h1>Fornecedores</h1>
           <p>Lista usada para preencher o fornecedor das cargas.</p>
         </div>
@@ -1628,7 +1677,8 @@
     $("cargaFormCard").hidden = !!carga;
     $("cargaAtivaBar").hidden = !carga;
     $("cadastroGrid").hidden = !carga;
-    if(!carga) return;
+    if(!carga){ renderRecentes(); return; }
+    $("recentesCard").hidden = true;
     var pendentes = carga.itens.filter(function(it){ return missingFields(it).length>0; }).length;
     $("cabFornecedor").textContent = carga.fornecedor || "—";
     $("cabNumero").textContent = carga.numeroCarga || "—";
@@ -1637,6 +1687,25 @@
     $("cabPendentes").hidden = pendentes===0;
     $("cabPendentes").textContent = plural(pendentes, "item com pendência", "itens com pendência");
     renderItensAtivos(carga);
+  }
+
+  function renderRecentes(){
+    var recentes = state.cargas.slice().sort(function(a,b){
+      var cmp = str(b.dataRecebimento).localeCompare(str(a.dataRecebimento));
+      return cmp!==0 ? cmp : num(b.criadoEm) - num(a.criadoEm);
+    }).slice(0, 8);
+    $("recentesCard").hidden = recentes.length===0;
+    $("tbodyRecentes").innerHTML = recentes.map(function(c){
+      var st = getCargaStatus(c);
+      var idAttr = escapeHtml(c.id);
+      return '<tr>'+
+        '<td><b>'+fmtDateBR(c.dataRecebimento)+'</b>'+(c.numeroCarga ? '<span class="sub-line">Nº '+escapeHtml(c.numeroCarga)+'</span>' : '')+'</td>'+
+        '<td class="wrap">'+escapeHtml(c.fornecedor||"—")+'</td>'+
+        '<td class="t-num">'+fmtNum(c.itens.length)+'</td>'+
+        '<td>'+(st ? '<span class="badge dot '+statusClass(st)+'">'+escapeHtml(st)+'</span>' : '<span class="sub-line">sem itens</span>')+'</td>'+
+        '<td><button type="button" class="btn btn-sm" data-action="add-itens" data-carga="'+idAttr+'">Continuar</button></td>'+
+      '</tr>';
+    }).join("");
   }
 
   function renderItensAtivos(carga){
