@@ -46,9 +46,9 @@ Essas chaves são feitas para ficar no frontend (não são secretas como uma cha
 
 Se você já tem cargas cadastradas (vindas do armazenamento local ou do Supabase antigo):
 
-1. **Antes de trocar de versão do app**, use o menu "Backup ▾ → Baixar planilha agora" para exportar tudo em `.xlsx`.
+1. **Antes de trocar de versão do app**, use o menu "Backup → Baixar planilha agora" para exportar tudo em `.xlsx`.
 2. Publique esta nova versão (com o Firebase já configurado).
-3. Abra o app e use "Backup ▾ → Importar planilha", selecionando o arquivo baixado no passo 1. A importação **mescla** os dados (não duplica nada já existente) e isso vai gravar cada carga no Firestore, populando o banco novo.
+3. Abra o app e use "Backup → Importar planilha", selecionando o arquivo baixado no passo 1. A importação **mescla** os dados (não duplica nada já existente) e isso vai gravar cada carga no Firestore, populando o banco novo.
 
 ## Publicar no GitHub Pages
 
@@ -93,6 +93,6 @@ git push -u origin main
 ## Observações
 
 - Os operadores devem abrir a URL do GitHub Pages, não o arquivo via `file://`.
-- O botão de backup Excel continua disponível no menu "Backup ▾" no cabeçalho.
+- O botão de backup Excel continua disponível no menu "Backup" da barra lateral.
 - Cada carga sincroniza de forma independente; alterações muito simultâneas na mesma carga seguem a última gravação recebida.
 - Para uso externo ou com dados sensíveis, recomenda-se adicionar autenticação (Firebase Auth) e regras de segurança por usuário no lugar das regras abertas do passo 3.

@@ -15,717 +15,843 @@
   }catch(e){}
 })();
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <style>
+  /* ================= Tokens ================= */
   :root{
-    --navy:#003567;
-    --navy-700:#004a8f;
-    --navy-900:#00203d;
-    --red:#F80035;
-    --red-100:#ffe3ea;
-    --amber:#a15c00;
-    --amber-100:#fff1dc;
-    --amber-border:#f3c98b;
-    --green:#166a41;
-    --green-100:#e1f5ea;
-    --purple:#5b3a9e;
-    --purple-100:#efe7fa;
-    --blue:#1550ae;
-    --blue-100:#e8f0fe;
-    --bg:#f3f4f7;
-    --card:#ffffff;
-    --border:#dfe3e9;
-    --text:#1b2430;
-    --muted:#66707d;
-    --surface-2:#f5f7fa;
+    --brand:#003567;
+    --brand-text:#003567;
+    --brand-soft:#e8f0f9;
+    --primary:#003567;
+    --primary-hover:#004a8f;
+    --accent:#F80035;
+
+    --bg:#f2f4f7;
+    --surface:#ffffff;
+    --surface-2:#f7f8fa;
     --surface-3:#eef1f5;
-    --readonly-bg:#f3f5f8;
-    --warn-bg:#fffdf7;
-    --neutral-text:#4b5563;
-    --neutral-text-2:#3a4453;
-    --neutral-border:#c3cad4;
-    --paste-bg:#f8fafc;
-    --paste-border:#b9c3d0;
-    --blue-border:#c7dcfb;
-    --green-solid:#166a41;
-    --green-solid-hover:#0f5735;
-    --focus-ring:rgba(0,74,143,.12);
-    --backdrop:rgba(10,20,35,.45);
-    --radius:9px;
-    --shadow:0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
-    --shadow-md:0 4px 10px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.06);
-    --shadow-lg:0 16px 40px rgba(0,32,61,.18), 0 4px 12px rgba(0,32,61,.10);
+    --hover:#f4f7fb;
+    --border:#e2e6ec;
+    --border-strong:#cdd4dd;
+    --text:#17202b;
+    --text-2:#3b4655;
+    --muted:#687384;
+
+    --blue:#1550ae;    --blue-bg:#e8f0fe;
+    --amber:#955300;   --amber-bg:#fff2dd;  --amber-border:#efc584;
+    --red:#c4002a;     --red-bg:#ffe6ec;
+    --green:#166a41;   --green-bg:#e2f5ea;
+    --purple:#5b3a9e;  --purple-bg:#efe8fa;
+
+    --sidebar-bg:#002b54;
+    --sidebar-bg-2:#001a35;
+    --sidebar-text:#b9cde3;
+    --sidebar-border:rgba(255,255,255,.1);
+
+    --focus:0 0 0 3px rgba(0,74,143,.2);
+    --backdrop:rgba(10,20,35,.5);
+    --radius:12px;
+    --radius-sm:8px;
+    --shadow:0 1px 3px rgba(16,24,40,.06), 0 1px 2px rgba(16,24,40,.04);
+    --shadow-md:0 6px 16px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.05);
+    --shadow-lg:0 20px 48px rgba(0,32,61,.22), 0 6px 14px rgba(0,32,61,.1);
     --ease:cubic-bezier(.2,.7,.3,1);
-    --dur:.18s;
+    --sidebar-w:248px;
     color-scheme:light;
   }
   html[data-theme="dark"]{
-    --navy:#4a90e2;
-    --navy-700:#6aa8ea;
-    --navy-900:#0a1928;
-    --red:#ff6b8a;
-    --red-100:#3d1220;
-    --amber:#ffc069;
-    --amber-100:#3a2a0d;
-    --amber-border:#5c4419;
-    --green:#5fe0a0;
-    --green-100:#0f3324;
-    --purple:#c3adfb;
-    --purple-100:#2a2050;
-    --blue:#8fb8ff;
-    --blue-100:#16273f;
-    --bg:#11151b;
-    --card:#1a1f27;
-    --border:#2c333d;
-    --text:#e7ebf1;
-    --muted:#98a3b0;
-    --surface-2:#232a34;
-    --surface-3:#2a313c;
-    --readonly-bg:#20262f;
-    --warn-bg:#33290f;
-    --neutral-text:#c3cad4;
-    --neutral-text-2:#d3dae2;
-    --neutral-border:#3a4453;
-    --paste-bg:#1f2530;
-    --paste-border:#3a4453;
-    --blue-border:#2f4a72;
-    --green-solid:#1c8a52;
-    --green-solid-hover:#15703f;
-    --focus-ring:rgba(74,144,226,.28);
-    --backdrop:rgba(0,0,0,.6);
-    --shadow:0 1px 2px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.3);
-    --shadow-md:0 4px 10px rgba(0,0,0,.4), 0 2px 4px rgba(0,0,0,.3);
-    --shadow-lg:0 16px 40px rgba(0,0,0,.55), 0 4px 12px rgba(0,0,0,.4);
+    --brand:#3d8ce0;
+    --brand-text:#8fbaf0;
+    --brand-soft:#16273f;
+    --primary:#2563a8;
+    --primary-hover:#2f72bd;
+    --accent:#ff5c7f;
+
+    --bg:#0f1318;
+    --surface:#171c23;
+    --surface-2:#1b2129;
+    --surface-3:#232a34;
+    --hover:#1f2630;
+    --border:#2a313b;
+    --border-strong:#3a434f;
+    --text:#e6eaf0;
+    --text-2:#c6ced8;
+    --muted:#939eac;
+
+    --blue:#8fb8ff;    --blue-bg:#172842;
+    --amber:#ffc069;   --amber-bg:#3a2a0d;  --amber-border:#6a4d1a;
+    --red:#ff7d97;     --red-bg:#3d1220;
+    --green:#5fd89b;   --green-bg:#0f3324;
+    --purple:#c3adfb;  --purple-bg:#2a2050;
+
+    --sidebar-bg:#111923;
+    --sidebar-bg-2:#0b1118;
+    --sidebar-text:#a9b8c9;
+    --sidebar-border:rgba(255,255,255,.08);
+
+    --focus:0 0 0 3px rgba(61,140,224,.35);
+    --backdrop:rgba(0,0,0,.62);
+    --shadow:0 1px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.3);
+    --shadow-md:0 6px 16px rgba(0,0,0,.4), 0 2px 4px rgba(0,0,0,.3);
+    --shadow-lg:0 20px 48px rgba(0,0,0,.6), 0 6px 14px rgba(0,0,0,.4);
     color-scheme:dark;
   }
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
   }
+
+  /* ================= Base ================= */
   *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:14.5px;
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:14px;
     line-height:1.45;
+    -webkit-font-smoothing:antialiased;
   }
+  button,input,select,textarea{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--brand);outline-offset:2px;}
   .num{font-variant-numeric:tabular-nums;}
-  button{font-family:inherit;}
-  input,select,textarea{font-family:inherit;font-size:14px;}
+  .ic{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+  @keyframes fadeSlideIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
 
-  /* ---------- Header ---------- */
-  header.topbar{
-    background:linear-gradient(180deg,var(--navy) 0%,var(--navy-900) 100%);
-    color:#fff;
-    padding:16px 24px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:16px;
-    align-items:center;
-    justify-content:space-between;
-    box-shadow:0 2px 6px rgba(0,32,61,.25);
+  /* ================= Shell ================= */
+  .app{display:grid;grid-template-columns:var(--sidebar-w) minmax(0,1fr);min-height:100vh;}
+  .sidebar{
+    position:sticky;top:0;height:100vh;z-index:30;
+    display:flex;flex-direction:column;gap:18px;
+    padding:20px 14px;
+    background:linear-gradient(180deg,var(--sidebar-bg) 0%,var(--sidebar-bg-2) 100%);
+    color:var(--sidebar-text);
   }
-  .brand{display:flex;flex-direction:column;gap:2px;}
-  .brand h1{margin:0;font-size:18px;font-weight:700;letter-spacing:.2px;}
-  .brand span{font-size:12.5px;color:#bcd3ea;}
-  .stats-row{display:flex;gap:10px;flex-wrap:wrap;}
-  .stat-chip{
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.18);
-    border-radius:8px;
-    padding:6px 12px;
-    text-align:center;
-    min-width:88px;
+  .brand{display:flex;align-items:center;gap:11px;padding:2px 8px 18px;border-bottom:1px solid var(--sidebar-border);}
+  .brand-mark{
+    width:40px;height:40px;border-radius:10px;flex:none;
+    display:grid;place-items:center;
+    background:#fff;color:#003567;font-weight:800;font-size:13px;letter-spacing:.4px;
+    box-shadow:inset 0 -3px 0 #F80035;
   }
-  .stat-chip b{display:block;font-size:16px;line-height:1.1;}
-  .stat-chip small{font-size:11px;color:#bcd3ea;}
-  .stat-action{font:inherit;color:inherit;cursor:pointer;transition:background var(--dur) var(--ease);}
-  .stat-action:hover{background:rgba(255,255,255,.16);}
-  .backup-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-  .menu-backup{position:relative;}
-  .menu-backup-dropdown{
-    position:absolute;right:0;top:calc(100% + 6px);
-    background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow-md);
-    min-width:200px;z-index:60;overflow:hidden;
-    animation:fadeSlideIn .15s var(--ease);
+  .brand-text{min-width:0;}
+  .brand-text strong{display:block;color:#fff;font-size:15px;font-weight:700;line-height:1.2;}
+  .brand-text span{font-size:12px;}
+
+  .nav{display:flex;flex-direction:column;gap:4px;}
+  .nav-item{
+    position:relative;display:flex;align-items:center;gap:10px;width:100%;
+    padding:10px 12px;border:0;border-radius:8px;background:transparent;
+    color:var(--sidebar-text);font-size:14px;font-weight:600;text-align:left;cursor:pointer;
+    transition:background .15s var(--ease),color .15s var(--ease);
   }
-  .menu-backup-dropdown[hidden]{display:none;}
+  .nav-item .ic{width:18px;height:18px;}
+  .nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+  .nav-item.active{background:rgba(255,255,255,.12);color:#fff;}
+  .nav-item.active::before{
+    content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#F80035;
+  }
+
+  .sidebar-footer{margin-top:auto;display:flex;flex-direction:column;gap:12px;padding-top:14px;border-top:1px solid var(--sidebar-border);}
+  .sync-status{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:0 8px;}
+  .sync-status .dot{width:8px;height:8px;border-radius:50%;background:#8a96a5;flex:none;}
+  .sync-status[data-state="online"] .dot{background:#3ddc84;box-shadow:0 0 0 3px rgba(61,220,132,.18);}
+  .sync-status[data-state="busy"] .dot{background:#ffc069;animation:pulse 1s infinite;}
+  .sync-status[data-state="offline"] .dot{background:#ffc069;}
+  .sync-status[data-state="error"] .dot{background:#ff5c7f;}
+  .sidebar-actions{display:flex;gap:6px;}
+  .side-btn{
+    flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 10px;
+    border-radius:8px;border:1px solid var(--sidebar-border);background:rgba(255,255,255,.05);
+    color:#e6eef7;font-size:13px;font-weight:600;cursor:pointer;
+    transition:background .15s var(--ease);
+  }
+  .side-btn:hover{background:rgba(255,255,255,.12);}
+  .side-btn.icon-only{flex:none;width:36px;padding:0;}
+  .theme-sun{display:none;}
+  html[data-theme="dark"] .theme-sun{display:block;}
+  html[data-theme="dark"] .theme-moon{display:none;}
+
+  .menu{position:relative;flex:1;display:flex;}
+  .menu-dropdown{
+    position:absolute;left:0;bottom:calc(100% + 8px);z-index:60;min-width:220px;
+    background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-md);
+    overflow:hidden;animation:fadeSlideIn .15s var(--ease);
+  }
   .menu-item{
-    display:block;width:100%;box-sizing:border-box;text-align:left;padding:10px 14px;
-    border:none;background:var(--card);color:var(--text);cursor:pointer;font-size:13.5px;font-weight:600;
+    display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;
+    border:0;background:var(--surface);color:var(--text);font-size:13.5px;font-weight:600;text-align:left;cursor:pointer;
   }
-  .menu-item:hover{background:var(--surface-2);}
-  .menu-item.active{color:var(--navy-700);}
-  html[data-theme="dark"] .menu-item.active{color:var(--blue);}
+  .menu-item:hover{background:var(--hover);}
   .menu-item + .menu-item{border-top:1px solid var(--border);}
+  .menu-item .ic{color:var(--muted);}
 
-  /* ---------- Buttons ---------- */
-  .btn{
-    border:1px solid var(--border);
-    background:var(--card);
-    color:var(--text);
-    padding:8px 14px;
-    border-radius:7px;
-    cursor:pointer;
-    font-size:13.5px;
-    font-weight:600;
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    white-space:nowrap;
-    transition:background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform .1s var(--ease), box-shadow var(--dur) var(--ease);
-  }
-  .btn:hover{background:var(--surface-2);}
-  .btn:active{transform:translateY(1px);}
-  .btn-primary{background:var(--navy);border-color:var(--navy);color:#fff;}
-  .btn-primary:hover{background:var(--navy-700);box-shadow:0 2px 8px rgba(0,53,103,.25);}
-  .btn-ghost-light{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);color:#fff;}
-  .btn-ghost-light:hover{background:rgba(255,255,255,.16);}
-  .btn-danger{background:var(--card);border-color:var(--red);color:var(--red);}
-  .btn-danger:hover{background:var(--red-100);}
-  .btn-sm{padding:5px 9px;font-size:12.5px;border-radius:6px;}
-  .btn:disabled{opacity:.5;cursor:not-allowed;}
-  .icon-btn{
-    border:1px solid var(--border);background:var(--card);border-radius:6px;
-    width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;
-    cursor:pointer;color:var(--muted);
-    transition:background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-  }
-  .icon-btn:hover{background:var(--surface-2);color:var(--text);}
-  .icon-btn.danger:hover{background:var(--red-100);color:var(--red);border-color:var(--red);}
+  .content{width:100%;max-width:1520px;justify-self:center;padding:28px 32px 48px;min-width:0;}
 
-  /* ---------- Tabs ---------- */
-  nav.tabs{
-    display:flex;gap:6px;padding:12px 24px 0 24px;background:var(--bg);
-    border-bottom:1px solid var(--border);
-  }
-  nav.tabs button{
-    border:none;background:transparent;padding:10px 16px;font-weight:600;
-    font-size:14px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;
-    margin-bottom:-1px;
-    transition:color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-  }
-  nav.tabs button.active{color:var(--navy);border-bottom-color:var(--navy);}
-  nav.tabs button:hover{color:var(--navy-700);}
-
-  main{padding:20px 24px 60px 24px;max-width:1600px;margin:0 auto;}
-  @keyframes fadeSlideIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+  /* ================= Page ================= */
   .tab-panel{display:none;}
   .tab-panel.active{display:block;animation:fadeSlideIn .22s var(--ease);}
+  .page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
+  .page-header h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.015em;}
+  .page-header p{margin:4px 0 0;color:var(--muted);font-size:13.5px;}
 
-  .card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    padding:18px 20px;
-    margin-bottom:18px;
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px;}
+  .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--border);}
+  .card-head h2{margin:0;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .card-head .sub{margin:3px 0 0;color:var(--muted);font-size:12.5px;}
+  .card-body{padding:18px 20px;}
+  .count-pill{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:20px;padding:0 7px;border-radius:999px;background:var(--surface-3);color:var(--text-2);font-size:11.5px;font-weight:700;}
+
+  /* ================= Forms ================= */
+  .form-grid{display:grid;gap:12px 14px;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .field label{font-size:12px;font-weight:600;color:var(--text-2);}
+  .field .req{color:var(--amber);font-weight:700;}
+  .field input,.field select,.field textarea,.input{
+    width:100%;height:38px;padding:0 11px;
+    border:1px solid var(--border-strong);border-radius:var(--radius-sm);
+    background:var(--surface);color:var(--text);font-size:14px;
+    transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
   }
-  .card h2{margin:0 0 4px 0;font-size:16px;}
-  .card .sub{color:var(--muted);font-size:12.5px;margin-bottom:14px;}
+  .field textarea{height:auto;min-height:62px;padding:9px 11px;resize:vertical;}
+  .field input:focus,.field select:focus,.field textarea:focus,.input:focus{outline:none;border-color:var(--brand);box-shadow:var(--focus);}
+  .input-sm{height:32px;font-size:13px;}
+  .span-2{grid-column:span 2;}
+  .span-full{grid-column:1/-1;}
+  .field.is-pending label{color:var(--amber);}
+  .field.is-pending input,.field.is-pending select,.field.is-pending textarea{border-color:var(--amber-border);background:var(--amber-bg);}
 
-  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));}
-  .field{display:flex;flex-direction:column;gap:5px;}
-  .field label{font-size:12px;font-weight:600;color:var(--muted);}
-  .field label .req{color:var(--red);}
-  .field input,.field select,.field textarea{
-    border:1px solid var(--border);border-radius:7px;padding:8px 10px;
-    background:var(--card);color:var(--text);
-  }
-  .field input:focus,.field select:focus,.field textarea:focus{
-    outline:none;border-color:var(--navy-700);box-shadow:0 0 0 3px var(--focus-ring);
-  }
-  .field.readonly input{background:var(--readonly-bg);color:var(--muted);}
-  .field.span2{grid-column:span 2;}
-  .field.full{grid-column:1/-1;}
-  textarea{resize:vertical;min-height:44px;}
-
-  .paste-box{
-    grid-column:1/-1;background:var(--paste-bg);border:1px dashed var(--paste-border);border-radius:8px;padding:10px 12px;
-    margin-bottom:4px;
-  }
-  .paste-box label{font-size:12px;font-weight:700;color:var(--navy);}
-  .paste-box textarea{width:100%;margin-top:6px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;}
-  .paste-box .hint{font-size:11.5px;color:var(--muted);margin-top:5px;}
-
-  .form-actions{display:flex;gap:10px;margin-top:16px;}
-
-  .carga-ativa-bar{
-    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
-    background:var(--blue-100);border:1px solid var(--blue-border);border-radius:8px;padding:10px 14px;margin-bottom:16px;
-  }
-  .carga-ativa-bar[hidden]{display:none;}
-  .carga-ativa-bar .info{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;}
-  .carga-ativa-bar .info b{color:var(--navy);}
-  .carga-ativa-bar .actions{display:flex;gap:8px;}
-  .carga-ativa-bar .actions .btn-primary{background:var(--green-solid);border-color:var(--green-solid);}
-  .carga-ativa-bar .actions .btn-primary:hover{background:var(--green-solid-hover);}
-
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
-  th{background:var(--surface-2);color:var(--muted);font-size:11.5px;text-transform:none;font-weight:700;position:sticky;top:0;}
-  tbody tr:hover{background:var(--surface-2);}
-  .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px;}
-  td.desc{white-space:normal;min-width:160px;}
-  td.obs{white-space:normal;min-width:160px;color:var(--muted);}
-  tr.pend-row td:first-child{box-shadow:inset 3px 0 0 var(--amber);}
-
-  .badge{
-    display:inline-block;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:700;white-space:nowrap;
-  }
-  .badge.st-blue{background:var(--blue-100);color:var(--blue);}
-  .badge.st-amber{background:var(--amber-100);color:var(--amber);}
-  .badge.st-red{background:var(--red-100);color:var(--red);}
-  .badge.st-green{background:var(--green-100);color:var(--green);}
-  .badge.st-purple{background:var(--purple-100);color:var(--purple);}
-  .badge.st-mixed{background:var(--surface-3);color:var(--neutral-text);border:1px dashed var(--neutral-border);}
-  .badge.tipo{background:var(--surface-3);color:var(--neutral-text-2);}
-  .badge.pend{background:var(--amber-100);color:var(--amber);border:1px solid var(--amber-border);}
-  .badge.ok{background:var(--green-100);color:var(--green);}
-
-  .row-actions{display:flex;gap:6px;}
-  .bulk-actions{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:12px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;}
-  .bulk-actions .field{min-width:220px;}
-  .bulk-actions .selection-count{color:var(--muted);font-size:12.5px;margin-right:auto;padding-bottom:8px;}
-  .select-item{width:16px;height:16px;vertical-align:middle;cursor:pointer;}
-  .select-all-inline{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text);padding-bottom:8px;}
-
-  .fornecedor-group{margin-bottom:22px;}
-  .fornecedor-group:last-child{margin-bottom:0;}
-  .fornecedor-group-title{
+  .fieldset + .fieldset{margin-top:16px;padding-top:16px;border-top:1px dashed var(--border);}
+  .fs-title{
+    margin:0 0 10px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
     display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
-    font-size:14px;font-weight:700;color:var(--navy);
-    padding-left:10px;border-left:3px solid var(--navy);
-    margin-bottom:10px;
   }
-  .fornecedor-group-title small{font-weight:600;color:var(--muted);font-size:12px;}
-  .carga-group{
-    background:var(--card);border:1px solid var(--border);border-left:4px solid var(--border);
-    border-radius:8px;margin-bottom:8px;overflow:hidden;
-    transition:box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  .fs-title small{font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;}
+  .sobra-out{
+    height:38px;display:flex;align-items:center;padding:0 12px;border-radius:var(--radius-sm);
+    background:var(--surface-3);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;
   }
-  .carga-group:last-child{margin-bottom:0;}
-  .carga-group:hover{box-shadow:var(--shadow-md);}
-  .carga-group.st-blue{border-left-color:var(--blue);}
-  .carga-group.st-amber{border-left-color:var(--amber);}
-  .carga-group.st-red{border-left-color:var(--red);}
-  .carga-group.st-green{border-left-color:var(--green);}
-  .carga-group.st-purple{border-left-color:var(--purple);}
-  .carga-group.st-mixed{border-left-color:var(--neutral-border);}
-  .carga-header-row{display:flex;align-items:stretch;}
-  .carga-header{
-    display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex:1;min-width:0;
-    padding:12px 16px;background:transparent;border:none;cursor:pointer;text-align:left;font:inherit;color:inherit;
-    transition:background var(--dur) var(--ease);
-  }
-  .carga-header:hover{background:var(--surface-2);}
-  .carga-edit-btn{flex:none;align-self:center;margin-right:12px;}
-  .carga-header .chevron{display:inline-flex;transition:transform .18s var(--ease);color:var(--muted);flex:none;font-size:11px;}
-  .carga-header.expanded .chevron{transform:rotate(90deg);}
-  .carga-header .carga-main{font-weight:700;font-size:13.5px;}
-  .carga-header .carga-meta{color:var(--muted);font-size:12.5px;}
-  .carga-items-wrap{border-top:1px solid var(--border);overflow-x:auto;animation:fadeSlideIn .2s var(--ease);}
-  .carga-items-wrap table{margin:0;}
+  .sobra-out.neg{background:var(--red-bg);color:var(--red);}
 
-  .empty-state{
-    text-align:center;padding:48px 20px;color:var(--muted);
+  .form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+  .legend-note{font-size:12px;color:var(--muted);}
+
+  .input-icon{position:relative;}
+  .input-icon .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+  .input-icon input{padding-left:34px;}
+
+  .paste-box{margin-bottom:18px;padding:12px 14px;border:1px dashed var(--border-strong);border-radius:10px;background:var(--surface-2);}
+  .paste-head{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;color:var(--brand-text);}
+  .paste-box textarea{
+    display:block;width:100%;margin-top:8px;min-height:58px;padding:9px 11px;resize:vertical;
+    border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
   }
-  .empty-state b{display:block;color:var(--text);font-size:15px;margin-bottom:4px;}
+  .paste-box textarea:focus{outline:none;border-color:var(--brand);box-shadow:var(--focus);}
+  .paste-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px;}
+  .hint{font-size:12px;color:var(--muted);}
 
-  /* Filtros */
-  .filtros{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));align-items:end;}
-  .filtros .field{margin:0;}
-  .filtros .actions-inline{display:flex;align-items:flex-end;}
-
-  .summary-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
-  .summary-chip{
-    background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-width:140px;
+  /* ================= Buttons ================= */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;height:38px;padding:0 14px;
+    border:1px solid var(--border-strong);border-radius:var(--radius-sm);
+    background:var(--surface);color:var(--text);font-size:13.5px;font-weight:600;white-space:nowrap;cursor:pointer;
+    transition:background .15s var(--ease),border-color .15s var(--ease),box-shadow .15s var(--ease),transform .1s var(--ease);
   }
-  .summary-chip b{display:block;font-size:19px;}
-  .summary-chip small{color:var(--muted);font-size:11.5px;}
+  .btn:hover{background:var(--hover);}
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .btn-primary:hover{background:var(--primary-hover);border-color:var(--primary-hover);}
+  .btn-danger{color:var(--red);border-color:var(--red);}
+  .btn-danger:hover{background:var(--red-bg);}
+  .btn-ghost{background:transparent;border-color:transparent;color:var(--text-2);}
+  .btn-ghost:hover{background:var(--surface-3);}
+  .btn-sm{height:32px;padding:0 11px;font-size:13px;}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .icon-btn{
+    width:32px;height:32px;display:inline-grid;place-items:center;flex:none;
+    border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;
+    transition:background .15s var(--ease),color .15s var(--ease);
+  }
+  .icon-btn:hover{background:var(--surface-3);color:var(--text);}
+  .icon-btn.danger:hover{background:var(--red-bg);color:var(--red);}
+  .link-btn{border:0;background:none;padding:0;color:var(--brand-text);font:inherit;font-weight:600;cursor:pointer;}
+  .link-btn:hover{text-decoration:underline;}
+  input[type="checkbox"]{width:16px;height:16px;margin:0;accent-color:var(--brand);cursor:pointer;flex:none;}
 
-  /* Modal */
+  /* ================= Badges ================= */
+  .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;line-height:1.4;white-space:nowrap;}
+  .badge .ic{width:12px;height:12px;}
+  .badge.dot::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .st-blue{--st:var(--blue);--st-bg:var(--blue-bg);}
+  .st-amber{--st:var(--amber);--st-bg:var(--amber-bg);}
+  .st-red{--st:var(--red);--st-bg:var(--red-bg);}
+  .st-green{--st:var(--green);--st-bg:var(--green-bg);}
+  .st-purple{--st:var(--purple);--st-bg:var(--purple-bg);}
+  .st-mixed{--st:var(--muted);--st-bg:var(--surface-3);}
+  .badge[class*="st-"]{background:var(--st-bg);color:var(--st);}
+  .badge.st-mixed{border:1px dashed var(--border-strong);}
+  .badge.tipo{background:var(--surface-3);color:var(--text-2);}
+  .badge.pend{background:var(--amber-bg);color:var(--amber);}
+  .badge.ok{background:var(--green-bg);color:var(--green);}
+
+  /* ================= Tables ================= */
+  .table-scroll{overflow:auto;}
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;}
+  th{
+    position:sticky;top:0;z-index:1;
+    padding:9px 12px;border-bottom:1px solid var(--border);
+    background:var(--surface-2);color:var(--muted);
+    font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-align:left;white-space:nowrap;
+  }
+  td{padding:9px 12px;border-bottom:1px solid var(--border);white-space:nowrap;vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:0;}
+  tbody tr:hover td{background:var(--hover);}
+  td.wrap{white-space:normal;min-width:180px;}
+  td.obs{white-space:normal;min-width:180px;color:var(--muted);}
+  .sub-line{display:block;color:var(--muted);font-size:12px;}
+  .t-num{text-align:right;font-variant-numeric:tabular-nums;}
+  .t-mono{font-variant-numeric:tabular-nums;font-weight:600;}
+  .t-actions{display:flex;align-items:center;gap:2px;}
+  tr.pend > td:first-child{box-shadow:inset 3px 0 0 var(--amber);}
+  .neg{color:var(--red);font-weight:700;}
+  tfoot td{background:var(--surface-2);font-weight:700;border-top:1px solid var(--border);border-bottom:0;}
+
+  /* ================= Cadastro ================= */
+  .active-carga{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    padding:16px 20px;margin-bottom:18px;border-radius:var(--radius);
+    background:linear-gradient(135deg,#003567 0%,#00539f 100%);color:#fff;box-shadow:var(--shadow-md);
+  }
+  html[data-theme="dark"] .active-carga{background:linear-gradient(135deg,#123a66 0%,#0f2c4d 100%);border:1px solid #1f4775;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.75;}
+  .active-carga strong{display:block;font-size:19px;font-weight:700;margin:2px 0 6px;}
+  .active-carga-meta{display:flex;gap:6px 16px;flex-wrap:wrap;align-items:center;font-size:13px;opacity:.95;}
+  .active-carga-meta span{display:inline-flex;align-items:center;gap:6px;}
+  .active-carga-meta .ic{opacity:.8;}
+  .active-carga .pend-chip{background:rgba(255,192,105,.2);color:#ffd59a;padding:2px 9px;border-radius:999px;font-weight:700;font-size:12px;}
+  .active-carga-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .active-carga .btn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.28);color:#fff;}
+  .active-carga .btn:hover{background:rgba(255,255,255,.2);}
+  .active-carga .btn-light{background:#fff;border-color:#fff;color:#003567;}
+  .active-carga .btn-light:hover{background:#e8f0f9;}
+
+  .cadastro-grid{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);align-items:start;}
+  .cadastro-grid > .card{margin:0;}
+  .itens-scroll{max-height:min(62vh,640px);}
+  @media (min-width:1280px){
+    .cadastro-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);}
+    #itensAtivosCard{position:sticky;top:20px;}
+    .itens-scroll{max-height:calc(100vh - 150px);}
+  }
+
+  /* ================= Consulta ================= */
+  .filters{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));padding:16px 20px;}
+  .filters-foot{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    padding:10px 20px;border-top:1px solid var(--border);background:var(--surface-2);border-radius:0 0 var(--radius) var(--radius);
+  }
+  .chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .chips-label{font-size:12px;color:var(--muted);font-weight:600;margin-right:2px;}
+  .chip{
+    height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--border-strong);
+    background:var(--surface);color:var(--text-2);font-size:12.5px;font-weight:600;cursor:pointer;
+    transition:background .15s var(--ease),border-color .15s var(--ease);
+  }
+  .chip:hover{background:var(--hover);}
+  .chip.active{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-text);}
+
+  .kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-bottom:12px;}
+  .kpi{
+    display:flex;flex-direction:column;gap:2px;padding:14px 16px;text-align:left;
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);
+    color:inherit;font:inherit;
+  }
+  button.kpi{cursor:pointer;transition:border-color .15s var(--ease),box-shadow .15s var(--ease);}
+  button.kpi:hover{border-color:var(--brand);box-shadow:var(--shadow-md);}
+  .kpi-label{font-size:12px;font-weight:600;color:var(--muted);}
+  .kpi-value{font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2;}
+  .kpi-foot{font-size:12px;color:var(--muted);}
+  .kpi-foot.link{color:var(--brand-text);font-weight:600;}
+  .kpi.warn .kpi-value{color:var(--amber);}
+  .kpi.neg .kpi-value{color:var(--red);}
+  .kpi.ok .kpi-value{color:var(--green);}
+  .status-strip{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;font-size:12.5px;color:var(--muted);}
+
+  .list-toolbar{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--border);}
+  .check-label{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;}
+  .selection-count{font-size:12.5px;color:var(--muted);}
+  .spacer{flex:1;}
+  .toolbar-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .toolbar-group select{width:auto;min-width:210px;}
+  .toolbar-divider{width:1px;height:22px;background:var(--border);}
+
+  .list-scroll{max-height:min(70vh,780px);overflow-y:auto;overflow-x:hidden;position:relative;}
+  .list-footer{padding:10px 16px;border-top:1px solid var(--border);background:var(--surface-2);font-size:12.5px;color:var(--muted);border-radius:0 0 var(--radius) var(--radius);}
+
+  .forn-head{
+    position:sticky;top:0;z-index:3;
+    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    padding:9px 16px;background:var(--surface-2);
+    border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  }
+  .forn-group:first-child .forn-head{border-top:0;}
+  .forn-name{font-size:13.5px;font-weight:700;color:var(--brand-text);}
+  .forn-meta{font-size:12px;color:var(--muted);}
+  .forn-body{display:flex;flex-direction:column;gap:8px;padding:10px 12px 14px;}
+
+  .carga{
+    background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--st,var(--border-strong));
+    border-radius:10px;overflow:hidden;
+    transition:box-shadow .15s var(--ease);
+  }
+  .carga:hover{box-shadow:var(--shadow-md);}
+  .carga-row{display:flex;align-items:center;gap:8px;padding:0 8px 0 12px;}
+  .carga-toggle{
+    flex:1;min-width:0;display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;
+    padding:11px 4px;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;
+  }
+  .chev{color:var(--muted);transition:transform .18s var(--ease);}
+  .carga.expanded .chev{transform:rotate(90deg);}
+  .carga-title{font-size:13.5px;font-weight:700;}
+  .carga-num{color:var(--muted);font-weight:600;}
+  .carga-stats{display:flex;gap:12px;font-size:12.5px;color:var(--muted);}
+  .carga-badges{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+  .carga-actions{display:flex;gap:2px;}
+  .carga-items{border-top:1px solid var(--border);overflow-x:auto;animation:fadeSlideIn .2s var(--ease);}
+  .carga-items th{position:static;}
+  .carga-items .t-actions-in{display:flex;align-items:center;gap:2px;}
+
+  .empty-state{text-align:center;padding:48px 20px;color:var(--muted);}
+  .empty-state .ic{width:36px;height:36px;stroke-width:1.5;color:var(--border-strong);margin-bottom:8px;}
+  .empty-state b{display:block;margin-bottom:4px;color:var(--text);font-size:15px;}
+
+  /* ================= Fornecedores ================= */
+  .forn-layout{display:grid;gap:18px;grid-template-columns:minmax(0,1fr);align-items:start;}
+  .forn-layout > .card{margin:0;}
+  @media (min-width:1100px){ .forn-layout{grid-template-columns:380px minmax(0,1fr);} }
+  .forn-scroll{max-height:min(65vh,700px);}
+
+  /* ================= Modal ================= */
   @keyframes modalBackdropIn{from{opacity:0;}to{opacity:1;}}
-  @keyframes modalBoxIn{from{opacity:0;transform:translateY(12px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+  @keyframes modalBoxIn{from{opacity:0;transform:translateY(12px) scale(.98);}to{opacity:1;transform:none;}}
   .modal-backdrop{
-    position:fixed;inset:0;background:var(--backdrop);display:flex;align-items:flex-start;justify-content:center;
-    padding:30px 16px;overflow:auto;z-index:50;
-    animation:modalBackdropIn .18s var(--ease);
+    position:fixed;inset:0;z-index:50;display:flex;align-items:flex-start;justify-content:center;
+    padding:5vh 16px;overflow:auto;background:var(--backdrop);animation:modalBackdropIn .18s var(--ease);
   }
-  .modal-backdrop[hidden]{display:none;}
   .modal{
-    background:var(--card);border-radius:12px;max-width:820px;width:100%;box-shadow:var(--shadow-lg);
+    width:100%;max-width:880px;max-height:90vh;display:flex;flex-direction:column;
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-lg);
     animation:modalBoxIn .22s var(--ease);
   }
-  .modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);}
-  .modal-header h3{margin:0;font-size:15.5px;}
-  .modal-body{padding:18px 20px;}
-  .modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
-  .close-x{border:none;background:none;font-size:18px;cursor:pointer;color:var(--muted);}
+  .modal-sm{max-width:540px;}
+  .modal-md{max-width:760px;}
+  .modal-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border);}
+  .modal-header h3{margin:0;font-size:16px;font-weight:700;}
+  .modal-header p{margin:2px 0 0;font-size:12.5px;color:var(--muted);}
+  .modal-body{padding:18px 20px;overflow:auto;}
+  .modal-footer{
+    display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:14px 20px;
+    border-top:1px solid var(--border);background:var(--surface-2);border-radius:0 0 14px 14px;
+  }
+  .modal-footer .push-left{margin-right:auto;}
 
+  /* ================= Toast ================= */
   .toast{
-    position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
-    background:var(--navy-900);color:#fff;padding:11px 18px;border-radius:8px;font-size:13.5px;
-    opacity:0;pointer-events:none;transition:all .25s ease;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:100;
-    max-width:90vw;
+    position:fixed;left:50%;bottom:20px;z-index:100;max-width:min(92vw,520px);
+    transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;
+    padding:11px 16px;border-radius:10px;background:#0b1f36;color:#fff;font-size:13.5px;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);transition:opacity .25s ease,transform .25s ease;
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  .toast.error{background:#7a1230;}
+  .toast.error{background:#8a1233;}
 
-  .field-warn input,.field-warn select,.field-warn textarea{border-color:var(--amber-border);background:var(--warn-bg);}
-
-  @media(max-width:720px){
-    header.topbar{padding:14px;}
-    main{padding:14px;}
-    .stats-row{display:none;}
+  /* ================= Responsivo ================= */
+  @media (max-width:960px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 14px;}
+    .brand{flex:1;padding:0;border:0;}
+    .brand-mark{width:34px;height:34px;font-size:12px;}
+    .sidebar-footer{margin:0;padding:0;border:0;flex-direction:row;align-items:center;gap:8px;}
+    .sync-status{padding:0;}
+    .sync-status .label{display:none;}
+    .menu{flex:none;}
+    .side-btn{flex:none;width:36px;padding:0;}
+    .side-btn .side-label{display:none;}
+    .menu-dropdown{left:auto;right:0;bottom:auto;top:calc(100% + 8px);}
+    .nav{order:3;flex-direction:row;width:100%;overflow-x:auto;gap:4px;margin:0 -2px;}
+    .nav-item{width:auto;white-space:nowrap;padding:8px 12px;font-size:13.5px;}
+    .nav-item.active::before{display:none;}
+    .content{padding:18px 16px 40px;}
+  }
+  @media (max-width:560px){
+    .span-2{grid-column:1/-1;}
+    .page-header h1{font-size:19px;}
+    .kpi-value{font-size:22px;}
+    .card-head,.card-body{padding-left:16px;padding-right:16px;}
+    .toolbar-group select{min-width:0;flex:1;}
+    .toolbar-group{width:100%;}
+    .carga-badges{margin-left:0;}
   }
 </style>
 </head>
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <h1>Controle de Cargas FLV</h1>
-    <span>Nagumo · Recebimento e acompanhamento de cargas</span>
-  </div>
-  <div class="stats-row" id="statsRow"></div>
-  <div class="backup-controls">
-    <div class="menu-backup">
-      <button class="btn btn-ghost-light btn-sm" id="btnMenuTema" title="Aparência">🌓 Tema ▾</button>
-      <div class="menu-backup-dropdown" id="menuTemaDropdown" hidden>
-        <button type="button" class="menu-item" id="btnTemaClaro" data-tema="light">☀️ Modo claro</button>
-        <button type="button" class="menu-item" id="btnTemaEscuro" data-tema="dark">🌙 Modo escuro</button>
+<!-- ================= Ícones ================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-package" viewBox="0 0 24 24"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></symbol>
+    <symbol id="i-collapse" viewBox="0 0 24 24"><path d="m7 20 5-5 5 5M7 4l5 5 5-5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M8 16H3v5"/></symbol>
+  </defs>
+</svg>
+
+<div class="app" id="app">
+
+  <!-- ================= Sidebar ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">FLV</div>
+      <div class="brand-text">
+        <strong>Controle de Cargas</strong>
+        <span>Nagumo · Recebimento</span>
       </div>
     </div>
-    <div class="menu-backup">
-      <button class="btn btn-ghost-light btn-sm" id="btnMenuBackup">Backup ▾</button>
-      <div class="menu-backup-dropdown" id="menuBackupDropdown" hidden>
-        <button type="button" class="menu-item" id="btnExportarAgora">Baixar planilha agora</button>
-        <label class="menu-item" for="inputImportar">
-          Importar planilha
-          <input type="file" id="inputImportar" accept=".xlsx" style="display:none;">
-        </label>
+
+    <nav class="nav" aria-label="Seções">
+      <button type="button" class="nav-item active" data-tab="cadastro"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg><span>Nova carga</span></button>
+      <button type="button" class="nav-item" data-tab="consulta"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><span>Consultar cargas</span></button>
+      <button type="button" class="nav-item" data-tab="fornecedores"><svg class="ic" aria-hidden="true"><use href="#i-users"/></svg><span>Fornecedores</span></button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sync-status" id="syncStatus" data-state="local" role="status">
+        <span class="dot"></span><span class="label">Modo local</span>
       </div>
-    </div>
-  </div>
-</header>
-
-<nav class="tabs">
-  <button data-tab="cadastro" class="active">Nova carga</button>
-  <button data-tab="consulta">Consultar cargas</button>
-  <button data-tab="fornecedores">Fornecedores</button>
-</nav>
-
-<main>
-
-  <!-- ================= TAB CADASTRO ================= -->
-  <section id="tab-cadastro" class="tab-panel active">
-
-    <div class="card">
-      <h2>Dados da carga</h2>
-      <div class="sub">Informe os dados do fornecedor. Depois, cadastre os itens entregues por ele.</div>
-      <form id="cargaForm">
-        <div class="grid">
-          <div class="field">
-            <label>Data de recebimento</label>
-            <input type="date" id="cgData" required>
+      <div class="sidebar-actions">
+        <div class="menu">
+          <button type="button" class="side-btn" id="btnMenuBackup" aria-haspopup="true" aria-expanded="false" title="Backup">
+            <svg class="ic" aria-hidden="true"><use href="#i-database"/></svg><span class="side-label">Backup</span>
+          </button>
+          <div class="menu-dropdown" id="menuBackupDropdown" hidden>
+            <button type="button" class="menu-item" id="btnExportarAgora"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Baixar planilha agora</button>
+            <label class="menu-item" for="inputImportar"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg>Importar planilha
+              <input type="file" id="inputImportar" accept=".xlsx" hidden>
+            </label>
           </div>
-          <div class="field">
-            <label>Nº da carga do fornecedor (se houver)</label>
-            <input type="text" id="cgNumero" placeholder="Ex.: 00458712">
+        </div>
+        <button type="button" class="side-btn icon-only" id="btnTema" title="Alternar tema" aria-label="Alternar tema">
+          <svg class="ic theme-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="ic theme-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= Conteúdo ================= -->
+  <main class="content">
+
+    <!-- ================= TAB CADASTRO ================= -->
+    <section id="tab-cadastro" class="tab-panel active">
+      <header class="page-header">
+        <div>
+          <h1>Nova carga</h1>
+          <p>Registre a carga do fornecedor e cadastre os itens recebidos.</p>
+        </div>
+      </header>
+
+      <div class="card" id="cargaFormCard">
+        <div class="card-head">
+          <div>
+            <h2><svg class="ic" aria-hidden="true"><use href="#i-truck"/></svg>Dados da carga</h2>
+            <p class="sub">Informe os dados do fornecedor. Depois, cadastre os itens entregues por ele.</p>
           </div>
-          <div class="field span2">
-            <label>Fornecedor de entrega <span class="req">*</span></label>
-            <input type="text" id="cgFornecedor" list="fornecedoresList" placeholder="Nome do fornecedor" required>
-            <datalist id="fornecedoresList"></datalist>
+        </div>
+        <form id="cargaForm" class="card-body">
+          <div class="form-grid">
+            <div class="field">
+              <label for="cgData">Data de recebimento</label>
+              <input type="date" id="cgData" required>
+            </div>
+            <div class="field">
+              <label for="cgNumero">Nº da carga do fornecedor (se houver)</label>
+              <input type="text" id="cgNumero" placeholder="Ex.: 00458712" autocomplete="off">
+            </div>
+            <div class="field span-2">
+              <label for="cgFornecedor">Fornecedor de entrega <span class="req">*</span></label>
+              <input type="text" id="cgFornecedor" list="fornecedoresList" placeholder="Nome do fornecedor" autocomplete="off" required>
+              <datalist id="fornecedoresList"></datalist>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Iniciar cadastro de itens</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="active-carga" id="cargaAtivaBar" hidden>
+        <div>
+          <span class="eyebrow">Carga em cadastro</span>
+          <strong id="cabFornecedor">—</strong>
+          <div class="active-carga-meta">
+            <span>Nº <b id="cabNumero">—</b></span>
+            <span><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg><b id="cabData">—</b></span>
+            <span><svg class="ic" aria-hidden="true"><use href="#i-package"/></svg><b id="cabTotalItens">0</b></span>
+            <span class="pend-chip" id="cabPendentes" hidden></span>
           </div>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary" id="btnIniciarCarga">Iniciar cadastro de itens</button>
+        <div class="active-carga-actions">
+          <button type="button" class="btn btn-sm" id="btnEditarCargaAtiva"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg>Editar dados</button>
+          <button type="button" class="btn btn-sm btn-light" id="btnTrocarCarga"><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg>Iniciar outra carga</button>
         </div>
-      </form>
-    </div>
-
-    <div class="carga-ativa-bar" id="cargaAtivaBar" hidden>
-      <div class="info">
-        <div>Fornecedor: <b id="cabFornecedor">—</b></div>
-        <div>Nº carga: <b id="cabNumero">—</b></div>
-        <div>Data: <b id="cabData">—</b></div>
-        <div>Itens cadastrados: <b id="cabTotalItens">0</b></div>
-      </div>
-      <div class="actions">
-        <button class="btn btn-sm" id="btnEditarCargaAtiva">Editar dados da carga</button>
-        <button class="btn btn-sm" id="btnTrocarCarga">Trocar / iniciar outra carga</button>
-      </div>
-    </div>
-
-    <div class="card" id="itemFormCard" hidden>
-      <h2>Adicionar item</h2>
-      <div class="sub">Cole o texto do sistema no formato <b>PLU, Descrição, Embalagem, Quantidade</b> para preencher automaticamente, ou digite manualmente. Colar mais de uma linha adiciona vários itens de uma vez.</div>
-
-      <div class="paste-box">
-        <label>Colar dados do sistema</label>
-        <textarea id="pasteArea" rows="2" placeholder="Ex.: 12345&#9;ALFACE CRESPA&#9;CX 6UN&#9;20"></textarea>
-        <div class="hint">Aceita colagem separada por tabulação ou vírgula. Uma linha = um item. Várias linhas = vários itens adicionados direto na lista abaixo, para você completar os campos que faltarem.</div>
       </div>
 
-      <form id="itemForm">
-        <div class="grid">
-          <div class="field"><label>PLU</label><input type="text" id="itPlu"></div>
-          <div class="field span2"><label>Descrição do produto</label><input type="text" id="itDescricao"></div>
-          <div class="field"><label>Padrão da embalagem recebida</label><input type="text" id="itEmbalagem"></div>
-          <div class="field"><label>Quantidade recebida (caixas)</label><input type="number" min="0" id="itQuantidade"></div>
-          <div class="field"><label>Quantidade gerada (caixas)</label><input type="number" min="0" id="itQuantidadeGerada"></div>
-          <div class="field"><label>Lote de expedição (se houver)</label><input type="text" id="itLote"></div>
-          <div class="field">
-            <label>Tipo de carga</label>
-            <select id="itTipoCarga">
-              <option value="">Selecione</option>
-              <option>Pulmão</option>
-              <option>Seleção inversa</option>
-              <option>Bandejas</option>
-              <option>Estoque</option>
-            </select>
+      <div class="cadastro-grid" id="cadastroGrid" hidden>
+        <div class="card" id="itemFormCard">
+          <div class="card-head">
+            <div>
+              <h2>Adicionar item</h2>
+              <p class="sub">Campos com <span class="req" style="color:var(--amber);font-weight:700">*</span> ficam como pendência enquanto estiverem vazios.</p>
+            </div>
           </div>
-          <div class="field"><label>Caixas separadas p/ cozinha (se houver)</label><input type="number" min="0" id="itCaixasCozinha"></div>
-          <div class="field"><label>Caixas devolvidas p/ qualidade (se houver)</label><input type="number" min="0" id="itCaixasDevolvidas"></div>
-          <div class="field"><label>Nº da NF de devolução (fornecedor)</label><input type="text" id="itNfDevolucao"></div>
-          <div class="field">
-            <label>NF de devolução assinada?</label>
-            <select id="itNfAssinada">
-              <option value="">—</option>
-              <option>Assinada</option>
-              <option>Não assinada</option>
-            </select>
+          <div class="card-body">
+            <div class="paste-box">
+              <label class="paste-head" for="pasteArea"><svg class="ic" aria-hidden="true"><use href="#i-clipboard"/></svg>Colar dados do sistema</label>
+              <textarea id="pasteArea" rows="2" placeholder="PLU, Descrição, Embalagem, Quantidade — ex.: 12345&#9;ALFACE CRESPA&#9;CX 6UN&#9;20"></textarea>
+              <div class="paste-foot">
+                <span class="hint">Tabulação, vírgula ou ponto e vírgula. Uma linha preenche o formulário; várias linhas adicionam os itens direto na lista.</span>
+                <button type="button" class="btn btn-sm" id="btnProcessarColagem">Processar texto</button>
+              </div>
+            </div>
+            <form id="itemForm">
+              <div id="itemFields"></div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Adicionar item</button>
+                <button type="button" class="btn" id="btnLimparItem">Limpar campos</button>
+              </div>
+            </form>
           </div>
-          <div class="field">
-            <label>Status da carga</label>
-            <select id="itStatus">
-              <option>Em contagem</option>
-              <option>Aguardando ajuste de lote/Liberada</option>
-              <option>Devolvida</option>
-              <option>Liberada</option>
-              <option>Nota direta</option>
-              <option>Estoque</option>
-              <option>Avaliação pela qualidade</option>
-            </select>
+        </div>
+
+        <div class="card" id="itensAtivosCard">
+          <div class="card-head">
+            <div>
+              <h2>Itens desta carga <span class="count-pill" id="itensAtivosCount">0</span></h2>
+              <p class="sub">Mais recentes primeiro.</p>
+            </div>
           </div>
-          <div class="field"><label>Nota fiscal de entrada</label><input type="text" id="itNfEntrada"></div>
-          <div class="field readonly"><label>Sobra de caixas</label><input type="text" id="itSobra" readonly value="0"></div>
-          <div class="field"><label>Horário de geração do produto</label><input type="time" id="itHorario"></div>
-          <div class="field full"><label>Observação</label><textarea id="itObservacao" rows="2"></textarea></div>
+          <div class="table-scroll itens-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>PLU</th><th>Descrição</th><th class="t-num">Qtd</th><th class="t-num">Gerada</th><th class="t-num">Sobra</th>
+                  <th>Status</th><th>Pendências</th><th><span class="sr-only">Ações</span></th>
+                </tr>
+              </thead>
+              <tbody id="tbodyAtivos"></tbody>
+            </table>
+          </div>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Adicionar item</button>
-          <button type="button" class="btn" id="btnLimparItem">Limpar campos</button>
+      </div>
+    </section>
+
+    <!-- ================= TAB CONSULTA ================= -->
+    <section id="tab-consulta" class="tab-panel">
+      <header class="page-header">
+        <div>
+          <h1>Consultar cargas</h1>
+          <p>Filtre, acompanhe o status e edite as cargas cadastradas.</p>
         </div>
-      </form>
-    </div>
+        <button type="button" class="btn" id="btnExportarFiltrados"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Exportar filtrados</button>
+      </header>
 
-    <div class="card" id="itensAtivosCard" hidden>
-      <h2>Itens desta carga</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>PLU</th><th>Descrição</th><th>Embalagem</th><th>Qtd</th><th>Qtd gerada</th><th>Sobra</th>
-              <th>Status</th><th>Pendências</th><th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tbodyAtivos"></tbody>
-        </table>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ================= TAB CONSULTA ================= -->
-  <section id="tab-consulta" class="tab-panel">
-
-    <div class="card">
-      <h2>Filtros</h2>
-      <div class="filtros">
-        <div class="field"><label>Data de</label><input type="date" id="fDataDe"></div>
-        <div class="field"><label>Data até</label><input type="date" id="fDataAte"></div>
-        <div class="field"><label>Descrição do produto</label><input type="text" id="fDescricao" placeholder="Buscar..."></div>
-        <div class="field"><label>Fornecedor</label><input type="text" id="fFornecedor" list="fornecedoresList" placeholder="Buscar..."></div>
-        <div class="field">
-          <label>Tipo de carga</label>
-          <select id="fTipoCarga">
-            <option value="">Todos</option>
-            <option>Pulmão</option>
-            <option>Seleção inversa</option>
-            <option>Bandejas</option>
-              <option>Estoque</option>
-          </select>
+      <div class="card">
+        <div class="filters">
+          <div class="field"><label for="fDataDe">Data de</label><input type="date" id="fDataDe"></div>
+          <div class="field"><label for="fDataAte">Data até</label><input type="date" id="fDataAte"></div>
+          <div class="field"><label for="fDescricao">Produto (descrição ou PLU)</label><input type="text" id="fDescricao" placeholder="Buscar..." autocomplete="off"></div>
+          <div class="field"><label for="fFornecedor">Fornecedor</label><input type="text" id="fFornecedor" list="fornecedoresList" placeholder="Buscar..." autocomplete="off"></div>
+          <div class="field"><label for="fTipoCarga">Tipo de carga</label><select id="fTipoCarga"><option value="">Todos</option></select></div>
+          <div class="field"><label for="fNfDevolucao">Nº NF de devolução</label><input type="text" id="fNfDevolucao" placeholder="Buscar..." autocomplete="off"></div>
         </div>
-        <div class="field"><label>Nº NF de devolução</label><input type="text" id="fNfDevolucao" placeholder="Buscar..."></div>
-        <div class="field actions-inline"><button class="btn" id="btnLimparFiltros">Limpar filtros</button></div>
-      </div>
-    </div>
-
-    <div class="summary-row" id="summaryRow"></div>
-
-    <div class="card">
-      <div class="bulk-actions">
-        <label class="select-all-inline">
-          <input class="select-item" type="checkbox" id="selecionarTodosConsulta" title="Selecionar todos os itens filtrados">
-          Selecionar todos os itens filtrados
-        </label>
-        <div class="field">
-          <label for="statusEmMassa">Alterar status dos itens selecionados</label>
-          <select id="statusEmMassa">
-            <option value="">Selecione um status</option>
-            <option>Em contagem</option>
-            <option>Aguardando ajuste de lote/Liberada</option>
-            <option>Devolvida</option>
-            <option>Liberada</option>
-            <option>Nota direta</option>
-            <option>Estoque</option>
-            <option>Avaliação pela qualidade</option>
-          </select>
+        <div class="filters-foot">
+          <div class="chips">
+            <span class="chips-label">Período:</span>
+            <button type="button" class="chip" data-action="range" data-range="hoje">Hoje</button>
+            <button type="button" class="chip" data-action="range" data-range="7">Últimos 7 dias</button>
+            <button type="button" class="chip" data-action="range" data-range="30">Últimos 30 dias</button>
+            <button type="button" class="chip" data-action="range" data-range="tudo">Todo o período</button>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" id="btnLimparFiltros"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>Limpar filtros</button>
         </div>
-        <span class="selection-count" id="selectionCount">0 itens selecionados</span>
-        <button class="btn btn-primary" id="btnAplicarStatus">Aplicar status</button>
       </div>
-      <div id="tabelaConsulta">
-        <div id="tbodyConsulta"></div>
-      </div>
-      <div class="empty-state" id="emptyConsulta" hidden>
-        <b>Nenhuma carga cadastrada ainda.</b>
-        Vá até "Nova carga" para começar o cadastro.
-      </div>
-    </div>
 
-  </section>
+      <div class="kpis" id="summaryRow"></div>
+      <div class="status-strip" id="statusStrip"></div>
 
-  <!-- ================= TAB FORNECEDORES ================= -->
-  <section id="tab-fornecedores" class="tab-panel">
-    <div class="card" style="max-width:520px;">
-      <h2>Cadastrar fornecedor</h2>
-      <div class="sub">Monte aqui a lista de fornecedores usada no cadastro de cargas. Fornecedores digitados numa carga nova também entram nessa lista automaticamente.</div>
-      <form id="fornecedorForm">
-        <div class="grid" style="grid-template-columns:1fr auto;align-items:end;">
-          <div class="field"><label>Nome do fornecedor</label><input type="text" id="fnNome" placeholder="Ex.: DONI HORTIFRUTI"></div>
-          <button type="submit" class="btn btn-primary">Adicionar</button>
+      <div class="card">
+        <div class="list-toolbar">
+          <label class="check-label">
+            <input type="checkbox" id="selecionarTodosConsulta">
+            Selecionar todos
+          </label>
+          <span class="selection-count" id="selectionCount">Nenhum item selecionado</span>
+          <span class="spacer"></span>
+          <div class="toolbar-group">
+            <label class="sr-only" for="statusEmMassa">Novo status dos itens selecionados</label>
+            <select id="statusEmMassa" class="input input-sm"><option value="">Alterar status para...</option></select>
+            <button type="button" class="btn btn-primary btn-sm" id="btnAplicarStatus" disabled>Aplicar</button>
+            <span class="toolbar-divider" aria-hidden="true"></span>
+            <button type="button" class="icon-btn" id="btnExpandirTodas" title="Expandir todas as cargas" aria-label="Expandir todas as cargas"><svg class="ic" aria-hidden="true"><use href="#i-expand"/></svg></button>
+            <button type="button" class="icon-btn" id="btnRecolherTodas" title="Recolher todas as cargas" aria-label="Recolher todas as cargas"><svg class="ic" aria-hidden="true"><use href="#i-collapse"/></svg></button>
+          </div>
         </div>
-      </form>
-    </div>
-    <div class="card">
-      <h2>Fornecedores cadastrados</h2>
-      <div id="listaFornecedores"></div>
-    </div>
-  </section>
+        <div class="list-scroll" id="listaScroll">
+          <div id="tbodyConsulta"></div>
+          <div class="empty-state" id="emptyConsulta" hidden>
+            <svg class="ic" aria-hidden="true"><use href="#i-package"/></svg>
+            <b id="emptyTitulo">Nenhuma carga cadastrada ainda.</b>
+            <span id="emptyTexto">Vá até "Nova carga" para começar o cadastro.</span>
+          </div>
+        </div>
+        <div class="list-footer" id="listaFooter" hidden></div>
+      </div>
+    </section>
 
-</main>
+    <!-- ================= TAB FORNECEDORES ================= -->
+    <section id="tab-fornecedores" class="tab-panel">
+      <header class="page-header">
+        <div>
+          <h1>Fornecedores</h1>
+          <p>Lista usada para preencher o fornecedor das cargas.</p>
+        </div>
+      </header>
+      <div class="forn-layout">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h2>Cadastrar fornecedor</h2>
+              <p class="sub">Fornecedores digitados numa carga nova também entram aqui automaticamente.</p>
+            </div>
+          </div>
+          <form id="fornecedorForm" class="card-body">
+            <div class="field">
+              <label for="fnNome">Nome do fornecedor</label>
+              <input type="text" id="fnNome" placeholder="Ex.: DONI HORTIFRUTI" autocomplete="off">
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Adicionar</button>
+            </div>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Fornecedores cadastrados <span class="count-pill" id="fornCount">0</span></h2>
+            <div class="input-icon">
+              <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+              <input type="search" class="input input-sm" id="fnBusca" placeholder="Buscar fornecedor..." aria-label="Buscar fornecedor" autocomplete="off">
+            </div>
+          </div>
+          <div id="listaFornecedores"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
 
 <!-- ================= MODAL EDITAR ITEM ================= -->
 <div class="modal-backdrop" id="modalItemBackdrop" hidden>
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalItemTitulo">
     <div class="modal-header">
-      <h3>Editar item</h3>
-      <button class="close-x" id="closeModalItem">✕</button>
+      <div>
+        <h3 id="modalItemTitulo">Editar item</h3>
+        <p id="modalItemSub"></p>
+      </div>
+      <button type="button" class="icon-btn" data-close-modal aria-label="Fechar"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
     </div>
     <div class="modal-body">
-      <form id="editItemForm">
-        <div class="grid">
-          <div class="field"><label>PLU</label><input type="text" id="emPlu"></div>
-          <div class="field span2"><label>Descrição do produto</label><input type="text" id="emDescricao"></div>
-          <div class="field"><label>Padrão da embalagem recebida</label><input type="text" id="emEmbalagem"></div>
-          <div class="field"><label>Quantidade recebida (caixas)</label><input type="number" min="0" id="emQuantidade"></div>
-          <div class="field"><label>Quantidade gerada (caixas)</label><input type="number" min="0" id="emQuantidadeGerada"></div>
-          <div class="field"><label>Lote de expedição</label><input type="text" id="emLote"></div>
-          <div class="field">
-            <label>Tipo de carga</label>
-            <select id="emTipoCarga">
-              <option value="">Selecione</option>
-              <option>Pulmão</option>
-              <option>Seleção inversa</option>
-              <option>Bandejas</option>
-              <option>Estoque</option>
-            </select>
-          </div>
-          <div class="field"><label>Caixas p/ cozinha</label><input type="number" min="0" id="emCaixasCozinha"></div>
-          <div class="field"><label>Caixas devolvidas</label><input type="number" min="0" id="emCaixasDevolvidas"></div>
-          <div class="field"><label>Nº NF de devolução</label><input type="text" id="emNfDevolucao"></div>
-          <div class="field">
-            <label>NF devolução assinada?</label>
-            <select id="emNfAssinada">
-              <option value="">—</option>
-              <option>Assinada</option>
-              <option>Não assinada</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Status da carga</label>
-            <select id="emStatus">
-              <option>Em contagem</option>
-              <option>Aguardando ajuste de lote/Liberada</option>
-              <option>Devolvida</option>
-              <option>Liberada</option>
-              <option>Nota direta</option>
-              <option>Estoque</option>
-              <option>Avaliação pela qualidade</option>
-            </select>
-          </div>
-          <div class="field"><label>Nota fiscal de entrada</label><input type="text" id="emNfEntrada"></div>
-          <div class="field readonly"><label>Sobra de caixas</label><input type="text" id="emSobra" readonly></div>
-          <div class="field"><label>Horário de geração</label><input type="time" id="emHorario"></div>
-          <div class="field full"><label>Observação</label><textarea id="emObservacao" rows="2"></textarea></div>
-        </div>
-      </form>
+      <form id="editItemForm"><div id="editItemFields"></div></form>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-danger" id="btnExcluirItem">Excluir item</button>
-      <button class="btn" id="cancelModalItem">Cancelar</button>
-      <button class="btn btn-primary" id="salvarModalItem">Salvar alterações</button>
+      <button type="button" class="btn btn-danger push-left" id="btnExcluirItem"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Excluir item</button>
+      <button type="button" class="btn" data-close-modal>Cancelar</button>
+      <button type="submit" class="btn btn-primary" form="editItemForm">Salvar alterações</button>
     </div>
   </div>
 </div>
 
 <!-- ================= MODAL EDITAR CARGA ================= -->
 <div class="modal-backdrop" id="modalCargaBackdrop" hidden>
-  <div class="modal" style="max-width:520px;">
+  <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="modalCargaTitulo">
     <div class="modal-header">
-      <h3>Editar dados da carga</h3>
-      <button class="close-x" id="closeModalCarga">✕</button>
+      <h3 id="modalCargaTitulo">Editar dados da carga</h3>
+      <button type="button" class="icon-btn" data-close-modal aria-label="Fechar"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
     </div>
     <div class="modal-body">
       <form id="editCargaForm">
-        <div class="grid">
-          <div class="field"><label>Data de recebimento</label><input type="date" id="ecData"></div>
-          <div class="field"><label>Nº da carga</label><input type="text" id="ecNumero"></div>
-          <div class="field span2"><label>Fornecedor <span class="req">*</span></label><input type="text" id="ecFornecedor" list="fornecedoresList"></div>
+        <div class="form-grid">
+          <div class="field"><label for="ecData">Data de recebimento</label><input type="date" id="ecData" required></div>
+          <div class="field"><label for="ecNumero">Nº da carga</label><input type="text" id="ecNumero" autocomplete="off"></div>
+          <div class="field span-full"><label for="ecFornecedor">Fornecedor <span class="req">*</span></label><input type="text" id="ecFornecedor" list="fornecedoresList" autocomplete="off" required></div>
         </div>
       </form>
+      <div class="form-actions">
+        <button type="button" class="btn btn-sm" id="btnAdicionarItensCarga"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Adicionar itens a esta carga</button>
+      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn" id="btnAdicionarItensCarga" style="margin-right:auto;">Adicionar itens a esta carga</button>
-      <button class="btn btn-danger" id="btnExcluirCarga">Excluir carga inteira</button>
-      <button class="btn" id="cancelModalCarga">Cancelar</button>
-      <button class="btn btn-primary" id="salvarModalCarga">Salvar alterações</button>
+      <button type="button" class="btn btn-danger push-left" id="btnExcluirCarga"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Excluir carga</button>
+      <button type="button" class="btn" data-close-modal>Cancelar</button>
+      <button type="submit" class="btn btn-primary" form="editCargaForm">Salvar alterações</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
-  <div class="modal-backdrop" id="modalResumoCargasBackdrop" hidden>
-    <div class="modal" style="max-width:760px;">
-      <div class="modal-header">
-        <h3>Cargas cadastradas por fornecedor</h3>
-        <button class="close-x" id="closeModalResumoCargas">✕</button>
+<!-- ================= MODAL RESUMO ================= -->
+<div class="modal-backdrop" id="modalResumoCargasBackdrop" hidden>
+  <div class="modal modal-md" role="dialog" aria-modal="true" aria-labelledby="modalResumoTitulo">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalResumoTitulo">Cargas por fornecedor</h3>
+        <p id="resumoPeriodo"></p>
       </div>
-      <div class="modal-body" id="resumoCargasBody"></div>
-      <div class="modal-footer">
-        <button class="btn" id="fecharModalResumoCargas">Fechar</button>
-      </div>
+      <button type="button" class="icon-btn" data-close-modal aria-label="Fechar"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="modal-body" id="resumoCargasBody"></div>
+    <div class="modal-footer">
+      <button type="button" class="btn" data-close-modal>Fechar</button>
     </div>
   </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
@@ -735,6 +861,13 @@
   var STORAGE_KEY = "flv_cargas_backup_v1";
   var DRAFT_KEY = "flv_cargas_draft_v1";
   var THEME_KEY = "flv_theme_v1";
+  var CARGAS_COLLECTION = "cargas";
+  var FORNECEDORES_DOC_PATH = "meta/fornecedores";
+
+  var STATUS_PADRAO = "Em contagem";
+  var STATUS_MISTO = "Status misto";
+  var STATUS_LIST = ["Em contagem","Aguardando ajuste de lote/Liberada","Devolvida","Liberada","Nota direta","Estoque","Avaliação pela qualidade"];
+  var TIPOS_CARGA = ["Pulmão","Seleção inversa","Bandejas","Estoque"];
   var STATUS_CLASS = {
     "Em contagem":"st-blue",
     "Aguardando ajuste de lote/Liberada":"st-amber",
@@ -745,135 +878,203 @@
     "Avaliação pela qualidade":"st-purple",
     "Status misto":"st-mixed"
   };
-  var STATUS_ORDER = Object.keys(STATUS_CLASS);
+  var STATUS_ORDER = STATUS_LIST.concat([STATUS_MISTO]);
   var PENDENCIA_BASE = ["plu","descricao","embalagem","quantidadeRecebida","tipoCarga","status","nfEntrada","horarioGeracao"];
+
+  // Esquema único dos campos do item: usado para montar o formulário de cadastro e o modal de edição.
+  var ITEM_GROUPS = [
+    { id:"produto", title:"Produto" },
+    { id:"qtd", title:"Quantidades (caixas)", sobra:true },
+    { id:"receb", title:"Recebimento" },
+    { id:"dev", title:"Devolução", hint:"obrigatório quando houver caixas devolvidas ou status Devolvida" },
+    { id:"obs", title:"Observação" }
+  ];
+  var ITEM_FIELDS = [
+    { key:"plu", label:"PLU", group:"produto" },
+    { key:"descricao", label:"Descrição do produto", group:"produto", span:2 },
+    { key:"embalagem", label:"Padrão da embalagem", group:"produto" },
+    { key:"quantidadeRecebida", label:"Recebida", nome:"Quantidade recebida", type:"number", group:"qtd" },
+    { key:"quantidadeGerada", label:"Gerada", nome:"Quantidade gerada", type:"number", group:"qtd" },
+    { key:"caixasCozinha", label:"Separadas p/ cozinha", type:"number", group:"qtd" },
+    { key:"caixasDevolvidas", label:"Devolvidas p/ qualidade", type:"number", group:"qtd" },
+    { key:"lote", label:"Lote de expedição", group:"receb" },
+    { key:"tipoCarga", label:"Tipo de carga", type:"select", options:TIPOS_CARGA, empty:"Selecione", group:"receb" },
+    { key:"status", label:"Status", type:"select", options:STATUS_LIST, def:STATUS_PADRAO, group:"receb" },
+    { key:"nfEntrada", label:"NF de entrada", group:"receb" },
+    { key:"horarioGeracao", label:"Horário de geração", type:"time", group:"receb" },
+    { key:"nfDevolucao", label:"Nº NF de devolução", group:"dev" },
+    { key:"nfDevolucaoAssinada", label:"NF assinada?", nome:"NF de devolução assinada", type:"select", options:["Assinada","Não assinada"], empty:"—", group:"dev" },
+    { key:"observacao", label:"Observação", type:"textarea", group:"obs", hideLabel:true }
+  ];
+  var FIELD_NOME = {};
+  ITEM_FIELDS.forEach(function(f){ FIELD_NOME[f.key] = f.nome || f.label; });
+  var QTD_KEYS = ["quantidadeRecebida","quantidadeGerada","caixasCozinha","caixasDevolvidas"];
 
   /* ============ Estado ============ */
   var state = { cargas: [], fornecedores: [] };
   var currentCargaId = null;
-  var editItemRef = null; // {cargaId, itemId} - modal de item
-  var editCargaRef = null; // {cargaId} - modal de carga
-  var toastTimer = null;
+  var editItemRef = null;   // {cargaId, itemId}
+  var editCargaRef = null;  // {cargaId}
   var activeTab = "cadastro";
   var selectedItems = {};
   var expandedCargas = {};
+  var filters = { dataDe:"", dataAte:"", descricao:"", fornecedor:"", tipoCarga:"", nfDevolucao:"" };
+  var fornecedorBusca = "";
+  var toastTimer = null;
+  var focoAntesDoModal = null;
+
   var firestoreDb = null;
   var unsubscribeCargas = null;
   var unsubscribeFornecedores = null;
-  var CARGAS_COLLECTION = "cargas";
-  var FORNECEDORES_DOC_PATH = "meta/fornecedores";
-  var fornecedoresDirty = false; // só sincroniza meta/fornecedores no Firebase quando a lista realmente muda
-  var filters = { dataDe:"", dataAte:"", descricao:"", fornecedor:"", tipoCarga:"", nfDevolucao:"" };
+  var pendingCreates = {};    // cargaId -> promise do set() inicial (mutações esperam por ele)
+  var cargasExcluidas = {};   // evita que uma mutação atrasada recrie uma carga excluída
+  var pendingSyncs = 0;
+  var syncErro = false;
+  var remoteConectado = false;
 
   /* ============ Utilidades ============ */
+  function $(id){ return document.getElementById(id); }
   function uid(){ return "id-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8); }
-  function todayISO(){ var d=new Date(); var m=(d.getMonth()+1+"").padStart(2,"0"); var day=(d.getDate()+"").padStart(2,"0"); return d.getFullYear()+"-"+m+"-"+day; }
-  function num(v){ var n = Number(v); return isNaN(n) ? 0 : n; }
+  function pad2(n){ return String(n).padStart(2,"0"); }
+  function toISO(d){ return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate()); }
+  function todayISO(){ return toISO(new Date()); }
+  function daysAgoISO(n){ var d = new Date(); d.setDate(d.getDate()-n); return toISO(d); }
+  function str(v){ return v==null ? "" : String(v); }
+  function vazio(v){ return str(v).trim()===""; }
+  function num(v){ var n = Number(v); return isFinite(n) ? n : 0; }
   function calcSobra(qtdRecebida,qtdGerada,cozinha,dev){
     return num(qtdRecebida) - num(qtdGerada) - num(cozinha) - num(dev);
   }
+  function sobraItem(it){ return calcSobra(it.quantidadeRecebida, it.quantidadeGerada, it.caixasCozinha, it.caixasDevolvidas); }
   function escapeHtml(s){
-    return String(s==null?"":s).replace(/[&<>"']/g, function(c){
+    return str(s).replace(/[&<>"']/g, function(c){
       return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
     });
   }
   function fmtDateBR(iso){
     if(!iso) return "—";
-    var p = iso.split("-");
+    var p = String(iso).split("-");
     if(p.length!==3) return iso;
     return p[2]+"/"+p[1]+"/"+p[0];
   }
+  function fmtNum(n){ return Number(n).toLocaleString("pt-BR"); }
+  function plural(n, um, varios){ return fmtNum(n)+" "+(n===1 ? um : varios); }
+  function sortPt(a,b){ return a.localeCompare(b,"pt-BR"); }
+  function semAcento(s){ return str(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase(); }
+  function contem(valor, termo){ return semAcento(valor).indexOf(semAcento(termo).trim())!==-1; }
+  function ic(name, cls){ return '<svg class="ic'+(cls?" "+cls:"")+'" aria-hidden="true"><use href="#i-'+name+'"/></svg>'; }
+  function statusClass(st){ return STATUS_CLASS[st] || "st-blue"; }
+  function statusDoItem(it){ return it.status || STATUS_PADRAO; }
 
-  function normalizarFornecedor(s){ return String(s||"").trim(); }
-  function fornecedorExiste(nome){
+  function missingFields(item){
+    var missing = PENDENCIA_BASE.filter(function(f){ return vazio(item[f]); });
+    if(num(item.caixasDevolvidas)>0 || item.status==="Devolvida"){
+      if(vazio(item.nfDevolucao)) missing.push("nfDevolucao");
+      if(vazio(item.nfDevolucaoAssinada)) missing.push("nfDevolucaoAssinada");
+    }
+    return missing;
+  }
+  function badgePendencias(miss){
+    if(miss.length===0) return '<span class="badge ok">'+ic("check")+'completo</span>';
+    var nomes = miss.map(function(k){ return FIELD_NOME[k] || k; }).join(", ");
+    return '<span class="badge pend" title="Faltando: '+escapeHtml(nomes)+'">'+ic("alert")+miss.length+(miss.length===1?" pendente":" pendentes")+'</span>';
+  }
+
+  function toast(msg, isError){
+    var el = $("toast");
+    el.textContent = msg;
+    el.className = "toast show" + (isError ? " error" : "");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.className = "toast"; }, isError ? 5500 : 3800);
+  }
+
+  /* ============ Fornecedores ============ */
+  function normalizarFornecedor(s){ return str(s).trim(); }
+  function fornecedorExiste(nome, ignorar){
     nome = normalizarFornecedor(nome);
     if(!nome) return false;
     var low = nome.toLowerCase();
-    return state.fornecedores.some(function(f){ return f.toLowerCase()===low; });
+    return state.fornecedores.some(function(f){ return f!==ignorar && f.toLowerCase()===low; });
   }
-  function adicionarFornecedor(nome){
+  function adicionarFornecedorLocal(nome){
     nome = normalizarFornecedor(nome);
     if(!nome || fornecedorExiste(nome)) return false;
     state.fornecedores.push(nome);
-    state.fornecedores.sort(function(a,b){ return a.localeCompare(b,"pt-BR"); });
-    fornecedoresDirty = true;
+    state.fornecedores.sort(sortPt);
     return true;
+  }
+  // Adiciona localmente e no Firebase (se for novo).
+  function registrarFornecedor(nome){
+    nome = normalizarFornecedor(nome);
+    if(adicionarFornecedorLocal(nome)) syncFornecedoresRemote({ add:[nome] });
   }
   function removerFornecedor(nome){
     if(!confirm('Remover "'+nome+'" da lista de fornecedores? Cargas já cadastradas com esse nome não são afetadas.')) return;
     state.fornecedores = state.fornecedores.filter(function(f){ return f!==nome; });
-    fornecedoresDirty = true;
+    syncFornecedoresRemote({ remove:[nome] });
     saveState();
     toast("Fornecedor removido da lista.");
   }
   function renomearFornecedor(nomeAntigo){
     var novoNome = prompt('Novo nome para "'+nomeAntigo+'":', nomeAntigo);
-    if(novoNome===null) return; // cancelado
+    if(novoNome===null) return;
     novoNome = normalizarFornecedor(novoNome);
     if(!novoNome){ toast("O nome não pode ficar em branco.", true); return; }
     if(novoNome===nomeAntigo) return;
-    if(fornecedorExiste(novoNome)){ toast("Já existe um fornecedor com esse nome.", true); return; }
-    state.fornecedores = state.fornecedores.map(function(f){ return f===nomeAntigo ? novoNome : f; })
-      .sort(function(a,b){ return a.localeCompare(b,"pt-BR"); });
-    fornecedoresDirty = true;
+    if(fornecedorExiste(novoNome, nomeAntigo)){ toast("Já existe um fornecedor com esse nome.", true); return; }
+    state.fornecedores = state.fornecedores.map(function(f){ return f===nomeAntigo ? novoNome : f; }).sort(sortPt);
+    syncFornecedoresRemote({ add:[novoNome], remove:[nomeAntigo] });
     var cargasAtualizadas = 0;
     state.cargas.forEach(function(c){
-      if(c.fornecedor===nomeAntigo){ c.fornecedor = novoNome; cargasAtualizadas++; syncCargaHeaderRemote(c.id, { fornecedor: novoNome }); }
+      if(c.fornecedor===nomeAntigo){
+        c.fornecedor = novoNome;
+        cargasAtualizadas++;
+        syncCargaHeaderRemote(c.id, { fornecedor: novoNome });
+      }
     });
     saveState();
-    toast('Fornecedor renomeado para "'+novoNome+'"'+(cargasAtualizadas>0 ? " ("+cargasAtualizadas+" carga(s) atualizada(s))." : "."));
+    toast('Fornecedor renomeado para "'+novoNome+'"'+(cargasAtualizadas>0 ? " ("+plural(cargasAtualizadas,"carga atualizada","cargas atualizadas")+")." : "."));
   }
-
-  function missingFields(item){
-    var missing = [];
-    PENDENCIA_BASE.forEach(function(f){
-      var v = item[f];
-      if(v===undefined || v===null || String(v).trim()==="") missing.push(f);
-    });
-    var devolvidas = num(item.caixasDevolvidas);
-    if((devolvidas>0 || item.status==="Devolvida")){
-      if(!item.nfDevolucao) missing.push("nfDevolucao");
-      if(!item.nfDevolucaoAssinada) missing.push("nfDevolucaoAssinada");
-    }
-    return missing;
-  }
-
-  function toast(msg, isError){
-    var el = document.getElementById("toast");
-    el.textContent = msg;
-    el.className = "toast show" + (isError ? " error" : "");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ el.className = "toast"; }, 3800);
+  function consultarFornecedor(nome){
+    filters.fornecedor = nome;
+    filters.dataDe = ""; filters.dataAte = "";
+    $("fFornecedor").value = nome;
+    $("fDataDe").value = ""; $("fDataAte").value = "";
+    switchTab("consulta");
+    renderConsulta();
   }
 
   /* ============ Persistência local ============ */
+  function persistLocal(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch(e){ console.warn("Não foi possível salvar no armazenamento local:", e); }
+  }
   function loadState(){
     try{
       var raw = localStorage.getItem(STORAGE_KEY);
-      if(raw){ state = JSON.parse(raw); }
-      if(!state || !Array.isArray(state.cargas)) state = { cargas: [] };
-    }catch(e){ state = { cargas: [] }; }
-    if(!Array.isArray(state.fornecedores)) state.fornecedores = [];
-    // migração: garante que fornecedores já usados em cargas antigas apareçam na lista gerenciada
-    state.cargas.forEach(function(c){ adicionarFornecedor(c.fornecedor); });
+      var parsed = raw ? JSON.parse(raw) : null;
+      if(parsed && Array.isArray(parsed.cargas)){
+        state = { cargas: parsed.cargas, fornecedores: Array.isArray(parsed.fornecedores) ? parsed.fornecedores : [] };
+      }
+    }catch(e){ state = { cargas: [], fornecedores: [] }; }
+    state.cargas = state.cargas.filter(function(c){ return c && c.id; });
+    state.cargas.forEach(function(c){ if(!Array.isArray(c.itens)) c.itens = []; });
+    // garante que fornecedores usados em cargas antigas apareçam na lista (só localmente)
+    state.cargas.forEach(function(c){ adicionarFornecedorLocal(c.fornecedor); });
   }
   function saveState(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    if(fornecedoresDirty){
-      syncFornecedoresRemote();
-      fornecedoresDirty = false;
-    }
+    persistLocal();
     renderAll();
   }
 
+  /* ============ Firebase ============ */
   function configureRemoteSync(){
     var config = window.FLV_FIREBASE_CONFIG || {};
     if(!window.firebase || !config.apiKey || !config.projectId || String(config.apiKey).indexOf("COLE_")===0) return false;
     try{
       firebase.initializeApp(config);
       firestoreDb = firebase.firestore();
-      // Cache local (IndexedDB): ao recarregar a página, os dados já conhecidos vêm do
-      // cache em vez de gerar leitura no Firestore; só o que mudou de fato é lido do servidor.
+      // Cache local (IndexedDB): ao recarregar, os dados já conhecidos vêm do cache.
       try{
         firestoreDb.enablePersistence({synchronizeTabs:true}).catch(function(err){
           console.warn("Persistência offline do Firestore indisponível:", err && err.code);
@@ -886,6 +1087,20 @@
     }
   }
 
+  function setSyncStatus(){
+    var el = $("syncStatus");
+    var st, label;
+    if(!firestoreDb){ st = "local"; label = "Modo local (sem Firebase)"; }
+    else if(syncErro){ st = "error"; label = "Erro ao sincronizar"; }
+    else if(pendingSyncs>0){ st = "busy"; label = "Sincronizando…"; }
+    else if(!navigator.onLine){ st = "offline"; label = "Sem conexão"; }
+    else if(!remoteConectado){ st = "offline"; label = "Conectando…"; }
+    else { st = "online"; label = "Sincronizado"; }
+    el.setAttribute("data-state", st);
+    el.querySelector(".label").textContent = label;
+    el.title = label;
+  }
+
   function compactItem(item){
     var out = {};
     Object.keys(item).forEach(function(k){
@@ -895,110 +1110,127 @@
     });
     return out;
   }
+  function cargaParaDoc(carga){
+    var doc = { fornecedor: carga.fornecedor||"", criadoEm: carga.criadoEm||Date.now(), itens: (carga.itens||[]).map(compactItem) };
+    if(carga.dataRecebimento) doc.dataRecebimento = carga.dataRecebimento;
+    if(carga.numeroCarga) doc.numeroCarga = carga.numeroCarga;
+    return doc;
+  }
+  // Insere ou substitui itens pelo id (idempotente: uma nova tentativa não duplica o item).
+  function upsertItens(lista, novos){
+    var itens = Array.isArray(lista) ? lista.slice() : [];
+    novos.forEach(function(it){
+      var compacted = compactItem(it);
+      var idx = itens.findIndex(function(x){ return x.id===it.id; });
+      if(idx>=0) itens[idx] = compacted; else itens.push(compacted);
+    });
+    return itens;
+  }
 
-  // Mutação transacional genérica: lê o estado atual no servidor, aplica só a mudança
-  // específica (via mutateFn) e grava de volta. Se outra gravação acontecer no meio do
-  // caminho, o Firestore refaz a transação automaticamente com os dados mais novos —
-  // por isso duas pessoas editando a mesma carga ao mesmo tempo não se sobrescrevem.
+  var ERROS_DEFINITIVOS = ["permission-denied","invalid-argument","unauthenticated","not-found"];
+
+  // Mutação transacional: lê o estado atual no servidor, aplica só a mudança (mutateFn) e grava.
+  // Se outra gravação acontecer no meio do caminho, o Firestore refaz a transação com os dados
+  // mais novos. Falhas de rede são repetidas com espera crescente.
   function syncCargaMutationRemote(cargaId, mutateFn){
     if(!firestoreDb) return Promise.resolve();
     var ref = firestoreDb.collection(CARGAS_COLLECTION).doc(cargaId);
-    return firestoreDb.runTransaction(function(tx){
-      return tx.get(ref).then(function(doc){
-        var fresh = doc.exists ? doc.data() : null;
-        var novo = mutateFn(fresh);
-        if(novo) tx.set(ref, novo);
+    var tentativa = 0;
+    function executar(){
+      return firestoreDb.runTransaction(function(tx){
+        return tx.get(ref).then(function(doc){
+          if(cargasExcluidas[cargaId]) return;
+          var novo = mutateFn(doc.exists ? doc.data() : null);
+          if(novo) tx.set(ref, novo);
+        });
       });
-    }).catch(function(err){
+    }
+    function comRetry(){
+      return executar().catch(function(err){
+        tentativa++;
+        if(ERROS_DEFINITIVOS.indexOf(err && err.code)>=0 || tentativa>=8) throw err;
+        var espera = Math.min(30000, 1000*Math.pow(2, tentativa));
+        return new Promise(function(res){ setTimeout(res, espera); }).then(comRetry);
+      });
+    }
+    // Espera a criação da carga chegar ao servidor; senão a criação poderia sobrescrever esta mudança.
+    var antes = (pendingCreates[cargaId] || Promise.resolve()).catch(function(){});
+    pendingSyncs++; setSyncStatus();
+    return antes.then(comRetry).then(function(){
+      pendingSyncs--; syncErro = false; setSyncStatus();
+    }, function(err){
+      pendingSyncs--; syncErro = true; setSyncStatus();
       console.error("Falha ao sincronizar carga com o Firebase:", err);
+      toast("Não foi possível enviar uma alteração ao servidor. Verifique a conexão e confira os dados.", true);
     });
   }
 
   function criarCargaRemota(carga){
-    if(!firestoreDb) return;
-    var doc = { fornecedor: carga.fornecedor||"", criadoEm: carga.criadoEm||Date.now(), itens: (carga.itens||[]).map(compactItem) };
-    if(carga.dataRecebimento) doc.dataRecebimento = carga.dataRecebimento;
-    if(carga.numeroCarga) doc.numeroCarga = carga.numeroCarga;
-    firestoreDb.collection(CARGAS_COLLECTION).doc(carga.id).set(doc).catch(function(err){
+    if(!firestoreDb || !carga) return;
+    var p = firestoreDb.collection(CARGAS_COLLECTION).doc(carga.id).set(cargaParaDoc(carga));
+    pendingCreates[carga.id] = p;
+    p.then(function(){
+      if(pendingCreates[carga.id]===p) delete pendingCreates[carga.id];
+    }, function(err){
+      if(pendingCreates[carga.id]===p) delete pendingCreates[carga.id];
       console.error("Falha ao criar carga no Firebase:", err);
-    });
-  }
-
-  function syncItemAddRemote(cargaId, item){
-    var cargaLocal = getCarga(cargaId);
-    syncCargaMutationRemote(cargaId, function(fresh){
-      var base = fresh || { fornecedor: (cargaLocal&&cargaLocal.fornecedor)||"", criadoEm: (cargaLocal&&cargaLocal.criadoEm)||Date.now(), itens: [] };
-      if(cargaLocal && cargaLocal.dataRecebimento && !base.dataRecebimento) base.dataRecebimento = cargaLocal.dataRecebimento;
-      if(cargaLocal && cargaLocal.numeroCarga && !base.numeroCarga) base.numeroCarga = cargaLocal.numeroCarga;
-      var itens = Array.isArray(base.itens) ? base.itens.slice() : [];
-      itens.push(compactItem(item));
-      return Object.assign({}, base, { itens: itens });
+      toast("Não foi possível criar a carga no servidor.", true);
     });
   }
 
   function syncItensAddRemote(cargaId, novosItens){
     if(!novosItens || novosItens.length===0) return;
-    var cargaLocal = getCarga(cargaId);
+    var local = getCarga(cargaId);
     syncCargaMutationRemote(cargaId, function(fresh){
-      var base = fresh || { fornecedor: (cargaLocal&&cargaLocal.fornecedor)||"", criadoEm: (cargaLocal&&cargaLocal.criadoEm)||Date.now(), itens: [] };
-      if(cargaLocal && cargaLocal.dataRecebimento && !base.dataRecebimento) base.dataRecebimento = cargaLocal.dataRecebimento;
-      if(cargaLocal && cargaLocal.numeroCarga && !base.numeroCarga) base.numeroCarga = cargaLocal.numeroCarga;
-      var itens = Array.isArray(base.itens) ? base.itens.slice() : [];
-      novosItens.forEach(function(it){ itens.push(compactItem(it)); });
-      return Object.assign({}, base, { itens: itens });
+      var base = Object.assign({}, fresh || (local ? cargaParaDoc(local) : { fornecedor:"", criadoEm:Date.now(), itens:[] }));
+      if(local && local.dataRecebimento && !base.dataRecebimento) base.dataRecebimento = local.dataRecebimento;
+      if(local && local.numeroCarga && !base.numeroCarga) base.numeroCarga = local.numeroCarga;
+      base.itens = upsertItens(base.itens, novosItens);
+      return base;
     });
   }
-
-  function syncItemUpdateRemote(cargaId, itemId, updatedItem){
-    syncCargaMutationRemote(cargaId, function(fresh){
-      if(!fresh) return null;
-      var itens = (fresh.itens||[]).slice();
-      var idx = itens.findIndex(function(it){ return it.id===itemId; });
-      var compacted = compactItem(updatedItem);
-      if(idx>=0) itens[idx] = compacted; else itens.push(compacted);
-      return Object.assign({}, fresh, { itens: itens });
-    });
-  }
-
   function syncItensUpdateRemote(cargaId, itensAtualizados){
     if(!itensAtualizados || itensAtualizados.length===0) return;
     syncCargaMutationRemote(cargaId, function(fresh){
       if(!fresh) return null;
-      var itens = (fresh.itens||[]).slice();
-      itensAtualizados.forEach(function(updated){
-        var idx = itens.findIndex(function(it){ return it.id===updated.id; });
-        var compacted = compactItem(updated);
-        if(idx>=0) itens[idx] = compacted; else itens.push(compacted);
-      });
-      return Object.assign({}, fresh, { itens: itens });
+      return Object.assign({}, fresh, { itens: upsertItens(fresh.itens, itensAtualizados) });
     });
   }
-
   function syncItemDeleteRemote(cargaId, itemId){
     syncCargaMutationRemote(cargaId, function(fresh){
       if(!fresh) return null;
-      var itens = (fresh.itens||[]).filter(function(it){ return it.id!==itemId; });
-      return Object.assign({}, fresh, { itens: itens });
+      return Object.assign({}, fresh, { itens: (fresh.itens||[]).filter(function(it){ return it.id!==itemId; }) });
     });
   }
-
   function syncCargaHeaderRemote(cargaId, headerFields){
+    var local = getCarga(cargaId);
     syncCargaMutationRemote(cargaId, function(fresh){
-      var base = fresh || { itens: [] };
-      return Object.assign({}, base, headerFields);
+      var base = fresh || (local ? cargaParaDoc(local) : { itens: [] });
+      var novo = Object.assign({}, base, headerFields);
+      if(!novo.numeroCarga) delete novo.numeroCarga;
+      if(!novo.dataRecebimento) delete novo.dataRecebimento;
+      return novo;
     });
   }
-
   function deleteCargaRemote(cargaId){
     if(!firestoreDb) return;
     firestoreDb.collection(CARGAS_COLLECTION).doc(cargaId).delete().catch(function(err){
       console.error("Falha ao excluir carga no Firebase:", err);
+      toast("Não foi possível excluir a carga no servidor.", true);
     });
   }
 
-  function syncFornecedoresRemote(){
+  // Usa arrayUnion/arrayRemove: duas pessoas mexendo na lista ao mesmo tempo não se sobrescrevem.
+  function syncFornecedoresRemote(ops){
     if(!firestoreDb) return;
-    firestoreDb.doc(FORNECEDORES_DOC_PATH).set({ lista: state.fornecedores }).catch(function(err){
+    var FV = firebase.firestore.FieldValue;
+    var ref = firestoreDb.doc(FORNECEDORES_DOC_PATH);
+    var batch = firestoreDb.batch();
+    var temOp = false;
+    if(ops.add && ops.add.length){ batch.set(ref, { lista: FV.arrayUnion.apply(FV, ops.add) }, { merge:true }); temOp = true; }
+    if(ops.remove && ops.remove.length){ batch.set(ref, { lista: FV.arrayRemove.apply(FV, ops.remove) }, { merge:true }); temOp = true; }
+    if(!temOp) return;
+    batch.commit().catch(function(err){
       console.error("Falha ao sincronizar fornecedores com o Firebase:", err);
     });
   }
@@ -1009,59 +1241,137 @@
     if(unsubscribeFornecedores) unsubscribeFornecedores();
 
     unsubscribeCargas = firestoreDb.collection(CARGAS_COLLECTION).onSnapshot({includeMetadataChanges:true}, function(snapshot){
+      remoteConectado = !snapshot.metadata.fromCache;
+      setSyncStatus();
       var mudou = false;
-      snapshot.docChanges().forEach(function(change){
-        if(change.doc.metadata.hasPendingWrites) return; // eco da propria escrita local ainda nao confirmada - ignora
+      // includeMetadataChanges aqui também: quando uma gravação local é confirmada, o doc chega
+      // de novo como "modified" — sem isso, mudanças remotas recebidas nesse meio-tempo se perdiam.
+      snapshot.docChanges({includeMetadataChanges:true}).forEach(function(change){
+        if(change.doc.metadata.hasPendingWrites) return; // eco da própria escrita local ainda não confirmada
         var id = change.doc.id;
+        var idx = state.cargas.findIndex(function(c){ return c.id===id; });
         if(change.type==="removed"){
-          var idx = state.cargas.findIndex(function(c){ return c.id===id; });
           if(idx>=0){ state.cargas.splice(idx,1); mudou = true; }
-        } else {
-          var data = change.doc.data() || {};
-          var carga = Object.assign({ id: id, itens: [] }, data);
-          if(!Array.isArray(carga.itens)) carga.itens = [];
-          var idx2 = state.cargas.findIndex(function(c){ return c.id===id; });
-          if(idx2>=0) state.cargas[idx2] = carga; else state.cargas.push(carga);
-          mudou = true;
+          return;
         }
+        if(cargasExcluidas[id]) return;
+        var carga = Object.assign({ id: id, itens: [] }, change.doc.data() || {});
+        if(!Array.isArray(carga.itens)) carga.itens = [];
+        if(idx>=0) state.cargas[idx] = carga; else state.cargas.push(carga);
+        mudou = true;
       });
       if(mudou){
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        persistLocal();
         renderAll();
       }
-    }, function(err){ console.error("Erro na assinatura de cargas (Firebase):", err); });
+    }, function(err){
+      console.error("Erro na assinatura de cargas (Firebase):", err);
+      syncErro = true; setSyncStatus();
+    });
 
     unsubscribeFornecedores = firestoreDb.doc(FORNECEDORES_DOC_PATH).onSnapshot({includeMetadataChanges:true}, function(doc){
       if(doc.metadata.hasPendingWrites) return;
-      if(doc.exists){
-        var data = doc.data() || {};
-        if(Array.isArray(data.lista)){
-          state.fornecedores = data.lista;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-          renderAll();
-        }
+      if(!doc.exists){
+        // Primeira vez com Firebase: envia a lista local para popular o servidor.
+        if(!doc.metadata.fromCache && state.fornecedores.length) syncFornecedoresRemote({ add: state.fornecedores.slice() });
+        return;
       }
+      var lista = (doc.data() || {}).lista;
+      if(!Array.isArray(lista)) return;
+      var vistos = {};
+      state.fornecedores = lista.map(normalizarFornecedor).filter(function(f){
+        var k = f.toLowerCase();
+        if(!f || vistos[k]) return false;
+        vistos[k] = true;
+        return true;
+      }).sort(sortPt);
+      persistLocal();
+      renderAll();
     }, function(err){ console.error("Erro na assinatura de fornecedores (Firebase):", err); });
   }
 
+  /* ============ Formulário de item (gerado a partir do esquema) ============ */
+  function renderCampo(prefix, f){
+    var id = prefix+"-"+f.key;
+    var req = PENDENCIA_BASE.indexOf(f.key)>=0 ? ' <span class="req" title="Fica como pendência se vazio">*</span>' : '';
+    var label = '<label for="'+id+'"'+(f.hideLabel?' class="sr-only"':'')+'>'+escapeHtml(f.label)+req+'</label>';
+    var ctrl;
+    if(f.type==="select"){
+      ctrl = '<select id="'+id+'">'+
+        (f.empty!=null ? '<option value="">'+escapeHtml(f.empty)+'</option>' : '')+
+        f.options.map(function(o){ return '<option>'+escapeHtml(o)+'</option>'; }).join("")+
+      '</select>';
+    } else if(f.type==="textarea"){
+      ctrl = '<textarea id="'+id+'" rows="2" placeholder="Observações sobre o item (opcional)"></textarea>';
+    } else if(f.type==="number"){
+      ctrl = '<input type="number" min="0" step="any" inputmode="decimal" id="'+id+'">';
+    } else {
+      ctrl = '<input type="'+(f.type||"text")+'" id="'+id+'" autocomplete="off">';
+    }
+    var cls = "field" + (f.span===2 ? " span-2" : "") + (f.type==="textarea" ? " span-full" : "");
+    return '<div class="'+cls+'" data-field="'+f.key+'">'+label+ctrl+'</div>';
+  }
+  function renderItemFields(prefix){
+    return ITEM_GROUPS.map(function(g){
+      var campos = ITEM_FIELDS.filter(function(f){ return f.group===g.id; }).map(function(f){ return renderCampo(prefix, f); }).join("");
+      if(g.sobra){
+        campos += '<div class="field"><label for="'+prefix+'-sobra">Sobra</label><output id="'+prefix+'-sobra" class="sobra-out">0</output></div>';
+      }
+      return '<div class="fieldset" role="group" aria-label="'+escapeHtml(g.title)+'">'+
+        '<h3 class="fs-title">'+escapeHtml(g.title)+(g.hint ? '<small>'+escapeHtml(g.hint)+'</small>' : '')+'</h3>'+
+        '<div class="form-grid">'+campos+'</div>'+
+      '</div>';
+    }).join("");
+  }
+  function lerFormItem(prefix){
+    var out = {};
+    ITEM_FIELDS.forEach(function(f){
+      var v = $(prefix+"-"+f.key).value;
+      out[f.key] = (f.type==="select" || f.type==="number" || f.type==="time") ? v : v.trim();
+    });
+    return out;
+  }
+  function preencherFormItem(prefix, item){
+    ITEM_FIELDS.forEach(function(f){
+      var el = $(prefix+"-"+f.key);
+      var v = str(item[f.key]);
+      if(f.type==="select"){
+        var existe = Array.prototype.some.call(el.options, function(o){ return o.value===v; });
+        el.value = existe ? v : (f.def || "");
+      } else {
+        el.value = v;
+      }
+    });
+    atualizarSobra(prefix);
+  }
+  function limparFormItem(prefix){
+    preencherFormItem(prefix, { status: STATUS_PADRAO });
+  }
+  function atualizarSobra(prefix){
+    var v = {};
+    QTD_KEYS.forEach(function(k){ v[k] = $(prefix+"-"+k).value; });
+    var sobra = sobraItem(v);
+    var out = $(prefix+"-sobra");
+    out.textContent = fmtNum(sobra);
+    out.classList.toggle("neg", sobra<0);
+    out.title = sobra<0 ? "Sobra negativa: as saídas passam da quantidade recebida." : "";
+  }
+  function marcarPendencias(prefix, containerId){
+    var miss = missingFields(lerFormItem(prefix));
+    $(containerId).querySelectorAll("[data-field]").forEach(function(el){
+      el.classList.toggle("is-pending", miss.indexOf(el.getAttribute("data-field"))>=0);
+    });
+  }
+
+  /* ============ Rascunho ============ */
   function saveDraft(){
     var draft = {
       currentCargaId: currentCargaId,
-      carga: {
-        data: document.getElementById("cgData").value,
-        numero: document.getElementById("cgNumero").value,
-        fornecedor: document.getElementById("cgFornecedor").value
-      },
-      item: {}
+      carga: { numero: $("cgNumero").value, fornecedor: $("cgFornecedor").value },
+      itemData: lerFormItem("it")
     };
-    ["itPlu","itDescricao","itEmbalagem","itQuantidade","itLote","itTipoCarga",
-     "itCaixasCozinha","itCaixasDevolvidas","itNfDevolucao","itNfAssinada","itStatus",
-     "itNfEntrada","itHorario","itObservacao"].forEach(function(id){
-      draft.item[id] = document.getElementById(id).value;
-    });
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); }catch(e){}
   }
-
   function loadDraft(){
     try{
       var raw = localStorage.getItem(DRAFT_KEY);
@@ -1069,20 +1379,15 @@
       var draft = JSON.parse(raw);
       if(draft.currentCargaId && getCarga(draft.currentCargaId)) currentCargaId = draft.currentCargaId;
       if(draft.carga){
-        // cgData fica de fora de propósito: a data de recebimento sempre começa na data atual
-        // (já definida no init()), nunca com uma data antiga esquecida num rascunho.
-        document.getElementById("cgNumero").value = draft.carga.numero || "";
-        document.getElementById("cgFornecedor").value = draft.carga.fornecedor || "";
+        // cgData fica de fora de propósito: a data de recebimento sempre começa na data atual.
+        $("cgNumero").value = draft.carga.numero || "";
+        $("cgFornecedor").value = draft.carga.fornecedor || "";
       }
-      if(draft.item){
-        Object.keys(draft.item).forEach(function(id){
-          var field = document.getElementById(id);
-          if(field) field.value = draft.item[id] || "";
-        });
-        atualizarSobraForm();
+      if(draft.itemData && typeof draft.itemData==="object"){
+        preencherFormItem("it", Object.assign({ status: STATUS_PADRAO }, draft.itemData));
       }
     }catch(e){
-      localStorage.removeItem(DRAFT_KEY);
+      try{ localStorage.removeItem(DRAFT_KEY); }catch(e2){}
     }
   }
 
@@ -1090,7 +1395,7 @@
   function getFlatRows(){
     var rows = [];
     state.cargas.forEach(function(c){
-      c.itens.forEach(function(it){
+      (c.itens||[]).forEach(function(it){
         rows.push(Object.assign({}, it, {
           cargaId: c.id,
           fornecedor: c.fornecedor,
@@ -1101,29 +1406,29 @@
     });
     return rows;
   }
-
-  function buildWorkbook(){
-    var rows = getFlatRows().map(function(r){
+  function celula(v){ return v==null ? "" : v; }
+  function buildWorkbook(rowsFonte){
+    var rows = rowsFonte.map(function(r){
       return {
-        "Data de recebimento": r.dataRecebimento || "",
-        "Nº carga": r.numeroCarga || "",
-        "Fornecedor": r.fornecedor || "",
-        "PLU": r.plu || "",
-        "Descrição": r.descricao || "",
-        "Embalagem": r.embalagem || "",
-        "Quantidade recebida": r.quantidadeRecebida || "",
-        "Quantidade gerada": r.quantidadeGerada || "",
-        "Lote de expedição": r.lote || "",
-        "Tipo de carga": r.tipoCarga || "",
-        "Caixas cozinha": r.caixasCozinha || "",
-        "Caixas devolvidas": r.caixasDevolvidas || "",
-        "Sobra de caixas": calcSobra(r.quantidadeRecebida, r.quantidadeGerada, r.caixasCozinha, r.caixasDevolvidas),
-        "Nº NF devolução": r.nfDevolucao || "",
-        "NF devolução assinada": r.nfDevolucaoAssinada || "",
-        "Status da carga": r.status || "",
-        "NF de entrada": r.nfEntrada || "",
-        "Horário de geração": r.horarioGeracao || "",
-        "Observação": r.observacao || ""
+        "Data de recebimento": celula(r.dataRecebimento),
+        "Nº carga": celula(r.numeroCarga),
+        "Fornecedor": celula(r.fornecedor),
+        "PLU": celula(r.plu),
+        "Descrição": celula(r.descricao),
+        "Embalagem": celula(r.embalagem),
+        "Quantidade recebida": celula(r.quantidadeRecebida),
+        "Quantidade gerada": celula(r.quantidadeGerada),
+        "Lote de expedição": celula(r.lote),
+        "Tipo de carga": celula(r.tipoCarga),
+        "Caixas cozinha": celula(r.caixasCozinha),
+        "Caixas devolvidas": celula(r.caixasDevolvidas),
+        "Sobra de caixas": sobraItem(r),
+        "Nº NF devolução": celula(r.nfDevolucao),
+        "NF devolução assinada": celula(r.nfDevolucaoAssinada),
+        "Status da carga": celula(r.status),
+        "NF de entrada": celula(r.nfEntrada),
+        "Horário de geração": celula(r.horarioGeracao),
+        "Observação": celula(r.observacao)
       };
     });
     var ws = XLSX.utils.json_to_sheet(rows);
@@ -1135,37 +1440,87 @@
     XLSX.utils.book_append_sheet(wb, ws, "Cargas FLV");
     return wb;
   }
+  function exportar(rows, nomeArquivo){
+    if(!window.XLSX){ toast("Biblioteca de planilhas não carregou. Verifique a conexão.", true); return; }
+    if(rows.length===0){ toast("Não há itens para exportar."); return; }
+    XLSX.writeFile(buildWorkbook(rows), nomeArquivo);
+    toast("Planilha baixada ("+plural(rows.length,"item","itens")+").");
+  }
 
-  function baixarPlanilhaAgora(){
-    if(getFlatRows().length===0){ toast("Ainda não há itens cadastrados para exportar."); return; }
-    var wb = buildWorkbook();
-    XLSX.writeFile(wb, "backup_cargas_FLV.xlsx");
-    toast("Planilha baixada.");
+  function normalizarDataImport(v){
+    if(v==="" || v==null) return "";
+    if(typeof v==="number" && window.XLSX && XLSX.SSF){
+      var d = XLSX.SSF.parse_date_code(v);
+      if(d && d.y) return d.y+"-"+pad2(d.m)+"-"+pad2(d.d);
+    }
+    var s = str(v).trim();
+    var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if(m) return m[3]+"-"+pad2(m[2])+"-"+pad2(m[1]);
+    m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if(m) return m[1]+"-"+pad2(m[2])+"-"+pad2(m[3]);
+    return s;
+  }
+  function normalizarHoraImport(v){
+    if(v==="" || v==null) return "";
+    if(typeof v==="number"){
+      var minutos = Math.round((v % 1) * 24 * 60) % 1440;
+      return pad2(Math.floor(minutos/60))+":"+pad2(minutos%60);
+    }
+    var m = str(v).trim().match(/^(\d{1,2}):(\d{2})/);
+    return m ? pad2(m[1])+":"+m[2] : str(v).trim();
+  }
+  function texto(v){ return str(v).trim(); }
+  var CHAVE_ITEM = ["plu","descricao","embalagem","quantidadeRecebida","lote","horarioGeracao","nfEntrada"];
+  function mesmoItem(a, b){
+    return CHAVE_ITEM.every(function(k){ return texto(a[k])===texto(b[k]); });
   }
 
   function importarPlanilha(file){
+    if(!window.XLSX){ toast("Biblioteca de planilhas não carregou. Verifique a conexão.", true); return; }
     var reader = new FileReader();
     reader.onload = function(e){
       try{
-        var data = new Uint8Array(e.target.result);
-        var wb = XLSX.read(data, {type:"array"});
+        var wb = XLSX.read(new Uint8Array(e.target.result), {type:"array"});
         var ws = wb.Sheets[wb.SheetNames[0]];
         var rows = XLSX.utils.sheet_to_json(ws, {defval:""});
         if(rows.length===0){ toast("A planilha selecionada está vazia.", true); return; }
-        var ok = confirm("Importar vai ADICIONAR os dados desta planilha aos dados atuais (cargas e itens já existentes não são duplicados). Deseja continuar?");
-        if(!ok) return;
+        if(!("Fornecedor" in rows[0]) && !("PLU" in rows[0])){
+          toast("A planilha não está no formato do backup (colunas Fornecedor/PLU não encontradas).", true);
+          return;
+        }
+        if(!confirm("Importar vai ADICIONAR os dados desta planilha aos dados atuais (cargas e itens já existentes não são duplicados). Deseja continuar?")) return;
 
         var cargasNovas = 0, itensNovos = 0, itensIgnorados = 0;
         var cargasNovasIds = {};
         var itensNovosPorCarga = {};
+        var fornecedoresNovos = [];
 
         rows.forEach(function(row){
-          var dataRec = String(row["Data de recebimento"]||"");
-          var numeroCarga = String(row["Nº carga"]||"");
-          var fornecedor = String(row["Fornecedor"]||"");
+          var dataRec = normalizarDataImport(row["Data de recebimento"]);
+          var numeroCarga = texto(row["Nº carga"]);
+          var fornecedor = texto(row["Fornecedor"]);
+          var novoItem = {
+            plu: texto(row["PLU"]),
+            descricao: texto(row["Descrição"]),
+            embalagem: texto(row["Embalagem"]),
+            quantidadeRecebida: texto(row["Quantidade recebida"]),
+            quantidadeGerada: texto(row["Quantidade gerada"]),
+            lote: texto(row["Lote de expedição"]),
+            tipoCarga: texto(row["Tipo de carga"]),
+            caixasCozinha: texto(row["Caixas cozinha"]),
+            caixasDevolvidas: texto(row["Caixas devolvidas"]),
+            nfDevolucao: texto(row["Nº NF devolução"]),
+            nfDevolucaoAssinada: texto(row["NF devolução assinada"]),
+            status: texto(row["Status da carga"]) || STATUS_PADRAO,
+            nfEntrada: texto(row["NF de entrada"]),
+            horarioGeracao: normalizarHoraImport(row["Horário de geração"]),
+            observacao: texto(row["Observação"])
+          };
+          if(!novoItem.plu && !novoItem.descricao) return;
 
+          // Compara normalizando: campos vazios não existem nos docs do Firebase (undefined vs "").
           var carga = state.cargas.find(function(c){
-            return c.dataRecebimento===dataRec && c.numeroCarga===numeroCarga && c.fornecedor===fornecedor;
+            return texto(c.dataRecebimento)===dataRec && texto(c.numeroCarga)===numeroCarga && texto(c.fornecedor)===fornecedor;
           });
           if(!carga){
             carga = { id: uid(), dataRecebimento: dataRec, numeroCarga: numeroCarga, fornecedor: fornecedor, criadoEm: Date.now(), itens: [] };
@@ -1173,48 +1528,26 @@
             cargasNovas++;
             cargasNovasIds[carga.id] = true;
           }
-          if(fornecedor) adicionarFornecedor(fornecedor);
+          if(adicionarFornecedorLocal(fornecedor)) fornecedoresNovos.push(normalizarFornecedor(fornecedor));
 
-          var novoItem = {
-            plu: String(row["PLU"]||""),
-            descricao: String(row["Descrição"]||""),
-            embalagem: String(row["Embalagem"]||""),
-            quantidadeRecebida: row["Quantidade recebida"]===""?"":row["Quantidade recebida"],
-            quantidadeGerada: row["Quantidade gerada"]===""?"":row["Quantidade gerada"],
-            lote: String(row["Lote de expedição"]||""),
-            tipoCarga: String(row["Tipo de carga"]||""),
-            caixasCozinha: row["Caixas cozinha"]===""?"":row["Caixas cozinha"],
-            caixasDevolvidas: row["Caixas devolvidas"]===""?"":row["Caixas devolvidas"],
-            nfDevolucao: String(row["Nº NF devolução"]||""),
-            nfDevolucaoAssinada: String(row["NF devolução assinada"]||""),
-            status: String(row["Status da carga"]||"Em contagem"),
-            nfEntrada: String(row["NF de entrada"]||""),
-            horarioGeracao: String(row["Horário de geração"]||""),
-            observacao: String(row["Observação"]||"")
-          };
-
-          var jaExiste = carga.itens.some(function(it){
-            return it.plu===novoItem.plu && it.descricao===novoItem.descricao && it.embalagem===novoItem.embalagem &&
-              String(it.quantidadeRecebida)===String(novoItem.quantidadeRecebida) && it.lote===novoItem.lote &&
-              it.horarioGeracao===novoItem.horarioGeracao && it.nfEntrada===novoItem.nfEntrada;
-          });
-          if(jaExiste){ itensIgnorados++; return; }
+          if(carga.itens.some(function(it){ return mesmoItem(it, novoItem); })){ itensIgnorados++; return; }
 
           novoItem.id = uid();
           novoItem.criadoEm = Date.now();
           carga.itens.push(novoItem);
           itensNovos++;
           if(!cargasNovasIds[carga.id]){
-            (itensNovosPorCarga[carga.id] = itensNovosPorCarga[carga.id]||[]).push(novoItem);
+            (itensNovosPorCarga[carga.id] = itensNovosPorCarga[carga.id] || []).push(novoItem);
           }
         });
 
         Object.keys(cargasNovasIds).forEach(function(cargaId){ criarCargaRemota(getCarga(cargaId)); });
         Object.keys(itensNovosPorCarga).forEach(function(cargaId){ syncItensAddRemote(cargaId, itensNovosPorCarga[cargaId]); });
+        if(fornecedoresNovos.length) syncFornecedoresRemote({ add: fornecedoresNovos });
 
-        currentCargaId = null;
         saveState();
-        toast(cargasNovas+" carga(s) nova(s), "+itensNovos+" item(ns) adicionado(s)"+(itensIgnorados>0 ? ", "+itensIgnorados+" já existente(s) ignorado(s)." : "."));
+        toast(plural(cargasNovas,"carga nova","cargas novas")+", "+plural(itensNovos,"item adicionado","itens adicionados")+
+          (itensIgnorados>0 ? ", "+plural(itensIgnorados,"já existente ignorado","já existentes ignorados")+"." : "."));
       }catch(err){
         console.error(err);
         toast("Não foi possível ler esta planilha.", true);
@@ -1223,11 +1556,13 @@
     reader.readAsArrayBuffer(file);
   }
 
-  /* ============ Tabs ============ */
+  /* ============ Navegação ============ */
   function switchTab(name){
     activeTab = name;
-    document.querySelectorAll("nav.tabs button").forEach(function(b){
-      b.classList.toggle("active", b.dataset.tab===name);
+    document.querySelectorAll(".nav-item").forEach(function(b){
+      var on = b.getAttribute("data-tab")===name;
+      b.classList.toggle("active", on);
+      if(on) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
     });
     document.querySelectorAll(".tab-panel").forEach(function(p){
       p.classList.toggle("active", p.id==="tab-"+name);
@@ -1238,368 +1573,430 @@
   function getCarga(id){ return state.cargas.find(function(c){ return c.id===id; }); }
   function getCargaStatus(carga){
     if(!Array.isArray(carga.itens) || carga.itens.length===0) return null;
-    var primeiro = carga.itens[0].status || "Em contagem";
-    var misto = carga.itens.some(function(it){ return (it.status||"Em contagem")!==primeiro; });
-    return misto ? "Status misto" : primeiro;
+    var primeiro = statusDoItem(carga.itens[0]);
+    var misto = carga.itens.some(function(it){ return statusDoItem(it)!==primeiro; });
+    return misto ? STATUS_MISTO : primeiro;
+  }
+  function dentroPeriodo(data){
+    data = str(data);
+    if(filters.dataDe && data < filters.dataDe) return false;
+    if(filters.dataAte && data > filters.dataAte) return false;
+    return true;
+  }
+  function descricaoPeriodo(){
+    var de = filters.dataDe, ate = filters.dataAte;
+    if(!de && !ate) return "Todo o período";
+    if(de && de===ate) return fmtDateBR(de);
+    if(!de) return "Até "+fmtDateBR(ate);
+    if(!ate) return "A partir de "+fmtDateBR(de);
+    return fmtDateBR(de)+" a "+fmtDateBR(ate);
   }
 
   function renderFornecedoresDatalist(){
-    var dl = document.getElementById("fornecedoresList");
-    dl.innerHTML = state.fornecedores.map(function(f){ return '<option value="'+escapeHtml(f)+'">'; }).join("");
+    $("fornecedoresList").innerHTML = state.fornecedores.map(function(f){ return '<option value="'+escapeHtml(f)+'">'; }).join("");
   }
 
   function renderFornecedoresTab(){
-    var wrap = document.getElementById("listaFornecedores");
+    var wrap = $("listaFornecedores");
+    $("fornCount").textContent = state.fornecedores.length;
     if(state.fornecedores.length===0){
-      wrap.innerHTML = '<div class="empty-state"><b>Nenhum fornecedor cadastrado ainda.</b>Adicione acima para agilizar o preenchimento das cargas.</div>';
+      wrap.innerHTML = '<div class="empty-state">'+ic("users")+'<b>Nenhum fornecedor cadastrado ainda.</b>Adicione ao lado para agilizar o preenchimento das cargas.</div>';
       return;
     }
-    wrap.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Fornecedor</th><th>Cargas cadastradas</th><th>Ações</th></tr></thead><tbody>' +
-      state.fornecedores.map(function(f){
-        var qtd = state.cargas.filter(function(c){ return c.fornecedor===f; }).length;
-        return '<tr><td>'+escapeHtml(f)+'</td><td class="num">'+qtd+'</td><td class="row-actions">'+
-          '<button class="icon-btn" title="Renomear" data-rename-fornecedor="'+escapeHtml(f)+'">✎</button>'+
-          '<button class="icon-btn danger" title="Remover" data-del-fornecedor="'+escapeHtml(f)+'">🗑</button></td></tr>';
+    var cargasPorForn = {};
+    state.cargas.forEach(function(c){ cargasPorForn[c.fornecedor] = (cargasPorForn[c.fornecedor]||0) + 1; });
+    var lista = state.fornecedores.filter(function(f){ return !fornecedorBusca || contem(f, fornecedorBusca); });
+    if(lista.length===0){
+      wrap.innerHTML = '<div class="empty-state"><b>Nenhum fornecedor encontrado.</b>Tente outro termo de busca.</div>';
+      return;
+    }
+    wrap.innerHTML = '<div class="table-scroll forn-scroll"><table><thead><tr><th>Fornecedor</th><th class="t-num">Cargas</th><th><span class="sr-only">Ações</span></th></tr></thead><tbody>' +
+      lista.map(function(f){
+        var qtd = cargasPorForn[f] || 0;
+        var nomeAttr = escapeHtml(f);
+        return '<tr><td class="wrap">'+escapeHtml(f)+'</td>'+
+          '<td class="t-num">'+(qtd>0 ? '<button type="button" class="link-btn" data-action="consultar-forn" data-nome="'+nomeAttr+'" title="Ver cargas deste fornecedor">'+fmtNum(qtd)+'</button>' : '0')+'</td>'+
+          '<td><div class="t-actions">'+
+            '<button type="button" class="icon-btn" title="Renomear" aria-label="Renomear '+nomeAttr+'" data-action="rename-forn" data-nome="'+nomeAttr+'">'+ic("edit")+'</button>'+
+            '<button type="button" class="icon-btn danger" title="Remover" aria-label="Remover '+nomeAttr+'" data-action="del-forn" data-nome="'+nomeAttr+'">'+ic("trash")+'</button>'+
+          '</div></td></tr>';
       }).join("") + '</tbody></table></div>';
   }
 
-  function cargaDentroFiltroData(carga){
-    if(filters.dataDe && (carga.dataRecebimento||"") < filters.dataDe) return false;
-    if(filters.dataAte && (carga.dataRecebimento||"") > filters.dataAte) return false;
-    return true;
-  }
-
-  function renderStats(){
-    var cargasComItens = state.cargas.filter(function(c){
-      return Array.isArray(c.itens) && c.itens.length>0 && cargaDentroFiltroData(c);
-    });
-    var totalCargas = cargasComItens.length;
-    var porStatus = {};
-    cargasComItens.forEach(function(c){
-      var st = getCargaStatus(c);
-      porStatus[st] = (porStatus[st]||0) + 1;
-    });
-    var chipsStatus = STATUS_ORDER.filter(function(st){ return porStatus[st]>0; }).map(function(st){
-      return '<div class="stat-chip"><b class="num">'+porStatus[st]+'</b><small>'+escapeHtml(st)+'</small></div>';
-    }).join("");
-    var el = document.getElementById("statsRow");
-    el.title = "Contagem referente ao período selecionado em Consultar cargas (Data de / Data até)";
-    el.innerHTML =
-      '<button type="button" class="stat-chip stat-action" data-open-resumo-cargas><b class="num">'+totalCargas+'</b><small>cargas no período</small></button>'+
-      chipsStatus;
-  }
-
-  function renderResumoCargas(){
-    var porFornecedor = {};
-    state.cargas.forEach(function(carga){
-      if(!Array.isArray(carga.itens) || carga.itens.length===0) return;
-      var fornecedor = carga.fornecedor || "Sem fornecedor";
-      if(!porFornecedor[fornecedor]) porFornecedor[fornecedor] = { cargas:0, itens:0, volumes:0 };
-      porFornecedor[fornecedor].cargas++;
-      porFornecedor[fornecedor].itens += carga.itens.length;
-      porFornecedor[fornecedor].volumes += carga.itens.reduce(function(total,item){
-        return total + num(item.quantidadeRecebida);
-      }, 0);
-    });
-    var fornecedores = Object.keys(porFornecedor).sort(function(a,b){ return a.localeCompare(b,"pt-BR"); });
-    var body = document.getElementById("resumoCargasBody");
-    if(fornecedores.length===0){
-      body.innerHTML = '<div class="empty-state"><b>Nenhuma carga cadastrada.</b>As cargas só aparecem aqui depois que pelo menos um item for inserido.</div>';
-      return;
-    }
-    body.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Fornecedor</th><th>Cargas</th><th>Itens inseridos</th><th>Volumes</th></tr></thead><tbody>'+
-      fornecedores.map(function(fornecedor){
-        var resumo = porFornecedor[fornecedor];
-        return '<tr><td>'+escapeHtml(fornecedor)+'</td><td class="num">'+resumo.cargas+'</td><td class="num">'+resumo.itens+'</td><td class="num">'+resumo.volumes+'</td></tr>';
-      }).join("") + '</tbody></table></div>';
-  }
-
-  function renderCargaAtivaBar(){
-    var bar = document.getElementById("cargaAtivaBar");
-    var itemCard = document.getElementById("itemFormCard");
-    var itensCard = document.getElementById("itensAtivosCard");
+  function renderCargaAtiva(){
     var carga = currentCargaId ? getCarga(currentCargaId) : null;
-    if(!carga){
-      bar.hidden = true; itemCard.hidden = true; itensCard.hidden = true;
-      return;
-    }
-    bar.hidden = false; itemCard.hidden = false; itensCard.hidden = false;
-    document.getElementById("cabFornecedor").textContent = carga.fornecedor || "—";
-    document.getElementById("cabNumero").textContent = carga.numeroCarga || "—";
-    document.getElementById("cabData").textContent = fmtDateBR(carga.dataRecebimento);
-    document.getElementById("cabTotalItens").textContent = carga.itens.length;
-    renderItensAtivos();
+    $("cargaFormCard").hidden = !!carga;
+    $("cargaAtivaBar").hidden = !carga;
+    $("cadastroGrid").hidden = !carga;
+    if(!carga) return;
+    var pendentes = carga.itens.filter(function(it){ return missingFields(it).length>0; }).length;
+    $("cabFornecedor").textContent = carga.fornecedor || "—";
+    $("cabNumero").textContent = carga.numeroCarga || "—";
+    $("cabData").textContent = fmtDateBR(carga.dataRecebimento);
+    $("cabTotalItens").textContent = plural(carga.itens.length, "item", "itens");
+    $("cabPendentes").hidden = pendentes===0;
+    $("cabPendentes").textContent = plural(pendentes, "item com pendência", "itens com pendência");
+    renderItensAtivos(carga);
   }
 
-  function renderItensAtivos(){
-    var carga = getCarga(currentCargaId);
-    var tbody = document.getElementById("tbodyAtivos");
-    if(!carga || carga.itens.length===0){
-      tbody.innerHTML = '<tr><td colspan="9" style="color:var(--muted);text-align:center;padding:20px;">Nenhum item adicionado ainda nesta carga.</td></tr>';
+  function renderItensAtivos(carga){
+    var tbody = $("tbodyAtivos");
+    $("itensAtivosCount").textContent = carga.itens.length;
+    if(carga.itens.length===0){
+      tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state" style="padding:28px 10px;">'+ic("package")+'<b>Nenhum item ainda.</b>Adicione o primeiro item ao lado ou cole as linhas do sistema.</div></td></tr>';
       return;
     }
-    tbody.innerHTML = carga.itens.map(function(it){
-      var sobra = calcSobra(it.quantidadeRecebida, it.quantidadeGerada, it.caixasCozinha, it.caixasDevolvidas);
+    var cargaAttr = escapeHtml(carga.id);
+    tbody.innerHTML = carga.itens.slice().reverse().map(function(it){
+      var sobra = sobraItem(it);
       var miss = missingFields(it);
-      var stClass = STATUS_CLASS[it.status] || "st-blue";
-      return '<tr class="'+(miss.length>0?"pend-row":"")+'">'+
-        '<td class="num">'+escapeHtml(it.plu)+'</td>'+
-        '<td class="desc">'+escapeHtml(it.descricao)+'</td>'+
-        '<td>'+escapeHtml(it.embalagem)+'</td>'+
-        '<td class="num">'+escapeHtml(it.quantidadeRecebida)+'</td>'+
-        '<td class="num">'+escapeHtml(it.quantidadeGerada)+'</td>'+
-        '<td class="num">'+sobra+'</td>'+
-        '<td><span class="badge '+stClass+'">'+escapeHtml(it.status)+'</span></td>'+
-        '<td>'+(miss.length>0 ? '<span class="badge pend">'+miss.length+' pendente(s)</span>' : '<span class="badge ok">completo</span>')+'</td>'+
-        '<td class="row-actions">'+
-          '<button class="icon-btn" title="Editar" data-edit-item="'+it.id+'">✎</button>'+
-          '<button class="icon-btn danger" title="Excluir" data-del-item="'+it.id+'">🗑</button>'+
-        '</td>'+
+      var st = statusDoItem(it);
+      var itemAttr = escapeHtml(it.id);
+      return '<tr class="'+(miss.length>0 ? "pend" : "")+'">'+
+        '<td class="t-mono">'+escapeHtml(it.plu||"—")+'</td>'+
+        '<td class="wrap">'+escapeHtml(it.descricao||"—")+(it.embalagem ? '<span class="sub-line">'+escapeHtml(it.embalagem)+'</span>' : '')+'</td>'+
+        '<td class="t-num">'+escapeHtml(it.quantidadeRecebida)+'</td>'+
+        '<td class="t-num">'+escapeHtml(it.quantidadeGerada)+'</td>'+
+        '<td class="t-num'+(sobra<0 ? " neg" : "")+'">'+fmtNum(sobra)+'</td>'+
+        '<td><span class="badge dot '+statusClass(st)+'">'+escapeHtml(st)+'</span></td>'+
+        '<td>'+badgePendencias(miss)+'</td>'+
+        '<td><div class="t-actions">'+
+          '<button type="button" class="icon-btn" title="Editar" aria-label="Editar item" data-action="edit-item" data-carga="'+cargaAttr+'" data-item="'+itemAttr+'">'+ic("edit")+'</button>'+
+          '<button type="button" class="icon-btn danger" title="Excluir" aria-label="Excluir item" data-action="del-item" data-carga="'+cargaAttr+'" data-item="'+itemAttr+'">'+ic("trash")+'</button>'+
+        '</div></td>'+
       '</tr>';
     }).join("");
   }
 
   function applyFilters(rows){
     return rows.filter(function(r){
-      if(filters.dataDe && r.dataRecebimento < filters.dataDe) return false;
-      if(filters.dataAte && r.dataRecebimento > filters.dataAte) return false;
-      if(filters.descricao && (r.descricao||"").toLowerCase().indexOf(filters.descricao.toLowerCase())===-1) return false;
-      if(filters.fornecedor && (r.fornecedor||"").toLowerCase().indexOf(filters.fornecedor.toLowerCase())===-1) return false;
+      if(!dentroPeriodo(r.dataRecebimento)) return false;
+      if(filters.descricao && !contem(r.descricao, filters.descricao) && !contem(r.plu, filters.descricao)) return false;
+      if(filters.fornecedor && !contem(r.fornecedor, filters.fornecedor)) return false;
       if(filters.tipoCarga && r.tipoCarga!==filters.tipoCarga) return false;
-      if(filters.nfDevolucao && (r.nfDevolucao||"").toLowerCase().indexOf(filters.nfDevolucao.toLowerCase())===-1) return false;
+      if(filters.nfDevolucao && !contem(r.nfDevolucao, filters.nfDevolucao)) return false;
       return true;
     });
   }
 
+  function kpiHtml(label, valor, foot, cls){
+    return '<div class="kpi'+(cls ? " "+cls : "")+'"><span class="kpi-label">'+label+'</span><span class="kpi-value">'+valor+'</span><span class="kpi-foot">'+foot+'</span></div>';
+  }
+  function renderKpis(rows){
+    var cargasPeriodo = state.cargas.filter(function(c){ return c.itens && c.itens.length>0 && dentroPeriodo(c.dataRecebimento); });
+    var porStatus = {};
+    cargasPeriodo.forEach(function(c){ var st = getCargaStatus(c); porStatus[st] = (porStatus[st]||0) + 1; });
+    var sobra = rows.reduce(function(acc,r){ return acc + sobraItem(r); }, 0);
+    var pend = rows.filter(function(r){ return missingFields(r).length>0; }).length;
+
+    $("summaryRow").innerHTML =
+      '<button type="button" class="kpi" data-action="open-resumo" title="Ver cargas do período por fornecedor">'+
+        '<span class="kpi-label">Cargas no período</span>'+
+        '<span class="kpi-value">'+fmtNum(cargasPeriodo.length)+'</span>'+
+        '<span class="kpi-foot link">Ver por fornecedor →</span>'+
+      '</button>'+
+      kpiHtml("Itens filtrados", fmtNum(rows.length), descricaoPeriodo())+
+      kpiHtml("Sobra de caixas", fmtNum(sobra), "soma dos itens filtrados", sobra<0 ? "neg" : "")+
+      kpiHtml("Itens com pendência", fmtNum(pend), pend>0 ? "campos a completar" : "tudo completo", pend>0 ? "warn" : (rows.length ? "ok" : ""));
+
+    var chips = STATUS_ORDER.filter(function(st){ return porStatus[st]>0; }).map(function(st){
+      return '<span class="badge dot '+statusClass(st)+'">'+escapeHtml(st)+' · '+porStatus[st]+'</span>';
+    }).join("");
+    $("statusStrip").innerHTML = chips ? '<span>Status das cargas no período:</span>'+chips : '';
+  }
+
+  function atualizarChipsPeriodo(){
+    var hoje = todayISO(), atual = null;
+    if(!filters.dataDe && !filters.dataAte) atual = "tudo";
+    else if(filters.dataAte===hoje){
+      if(filters.dataDe===hoje) atual = "hoje";
+      else if(filters.dataDe===daysAgoISO(6)) atual = "7";
+      else if(filters.dataDe===daysAgoISO(29)) atual = "30";
+    }
+    document.querySelectorAll("[data-range]").forEach(function(b){
+      var on = b.getAttribute("data-range")===atual;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
   function renderConsulta(){
-    renderStats();
     var rows = applyFilters(getFlatRows());
 
-    var tbody = document.getElementById("tbodyConsulta");
-    var empty = document.getElementById("emptyConsulta");
-    var wrap = document.getElementById("tabelaConsulta");
-    var selectAll = document.getElementById("selecionarTodosConsulta");
+    // A seleção vale só para itens visíveis: o status em massa nunca atinge itens fora do filtro.
+    var visiveis = {};
+    rows.forEach(function(r){ visiveis[r.cargaId+"|"+r.id] = true; });
+    Object.keys(selectedItems).forEach(function(k){ if(!visiveis[k]) delete selectedItems[k]; });
+
+    renderKpis(rows);
+    atualizarChipsPeriodo();
+
+    var lista = $("tbodyConsulta");
+    var empty = $("emptyConsulta");
+    var footer = $("listaFooter");
+    var scroller = $("listaScroll");
+    var scrollTop = scroller.scrollTop;
 
     if(rows.length===0){
-      tbody.innerHTML = "";
-      wrap.style.display = "none";
-      selectAll.checked = false;
-      selectAll.indeterminate = false;
+      lista.innerHTML = "";
       empty.hidden = false;
-      empty.querySelector("b").textContent = state.cargas.some(function(c){ return c.itens && c.itens.length>0; }) ? "Nenhum item encontrado para os filtros aplicados." : "Nenhuma carga cadastrada ainda.";
-    } else {
-      wrap.style.display = "block";
-      empty.hidden = true;
-
-      var porFornecedor = {};
-      rows.forEach(function(r){
-        var forn = r.fornecedor || "Sem fornecedor";
-        if(!porFornecedor[forn]) porFornecedor[forn] = {};
-        if(!porFornecedor[forn][r.cargaId]){
-          porFornecedor[forn][r.cargaId] = { cargaId:r.cargaId, numeroCarga:r.numeroCarga, dataRecebimento:r.dataRecebimento, itens:[] };
-        }
-        porFornecedor[forn][r.cargaId].itens.push(r);
-      });
-      var fornecedores = Object.keys(porFornecedor).sort(function(a,b){ return a.localeCompare(b,"pt-BR"); });
-
-      tbody.innerHTML = fornecedores.map(function(forn){
-        var cargasObj = porFornecedor[forn];
-        var cargaIds = Object.keys(cargasObj).sort(function(a,b){
-          return (cargasObj[b].dataRecebimento||"").localeCompare(cargasObj[a].dataRecebimento||"");
-        });
-        var totalItensForn = cargaIds.reduce(function(acc,id){ return acc + cargasObj[id].itens.length; }, 0);
-
-        var cargasHtml = cargaIds.map(function(cargaId){
-          var grupo = cargasObj[cargaId];
-          var cargaCompleta = getCarga(cargaId);
-          var statusCarga = cargaCompleta ? getCargaStatus(cargaCompleta) : null;
-          var stClass = statusCarga ? (STATUS_CLASS[statusCarga] || "st-blue") : "";
-          var sobraTotal = grupo.itens.reduce(function(acc,it){ return acc + calcSobra(it.quantidadeRecebida,it.quantidadeGerada,it.caixasCozinha,it.caixasDevolvidas); }, 0);
-          var expandido = !!expandedCargas[cargaId];
-          return '<div class="carga-group '+stClass+'">'+
-            '<div class="carga-header-row">'+
-              '<button type="button" class="carga-header'+(expandido?" expanded":"")+'" data-toggle-carga="'+cargaId+'">'+
-                '<span class="chevron">▶</span>'+
-                '<span class="carga-main">'+fmtDateBR(grupo.dataRecebimento)+(grupo.numeroCarga ? " · Nº "+escapeHtml(grupo.numeroCarga) : "")+'</span>'+
-                '<span class="carga-meta">'+grupo.itens.length+(grupo.itens.length===1?" item":" itens")+' · sobra '+sobraTotal+'</span>'+
-                (statusCarga ? '<span class="badge '+stClass+'">'+escapeHtml(statusCarga)+'</span>' : '')+
-              '</button>'+
-              '<button type="button" class="icon-btn carga-edit-btn" title="Adicionar mais itens a esta carga" data-add-itens="'+cargaId+'">➕</button>'+
-              '<button type="button" class="icon-btn carga-edit-btn" title="Editar fornecedor, nº e data da carga" data-edit-carga="'+cargaId+'">✎</button>'+
-            '</div>'+
-            (expandido ? '<div class="carga-items-wrap">'+renderItensDaCargaConsulta(grupo.itens)+'</div>' : '')+
-          '</div>';
-        }).join("");
-
-        return '<div class="fornecedor-group">'+
-          '<div class="fornecedor-group-title">'+escapeHtml(forn)+' <small>'+cargaIds.length+(cargaIds.length===1?" carga · ":" cargas · ")+totalItensForn+(totalItensForn===1?" item":" itens")+'</small></div>'+
-          cargasHtml+
-        '</div>';
-      }).join("");
-
-      var selectedVisible = rows.filter(function(r){ return selectedItems[r.cargaId+"|"+r.id]; }).length;
-      selectAll.checked = selectedVisible===rows.length;
-      selectAll.indeterminate = selectedVisible>0 && selectedVisible<rows.length;
+      footer.hidden = true;
+      var temItens = state.cargas.some(function(c){ return c.itens && c.itens.length>0; });
+      if(!temItens){
+        $("emptyTitulo").textContent = "Nenhuma carga cadastrada ainda.";
+        $("emptyTexto").textContent = 'Vá até "Nova carga" para começar o cadastro.';
+      } else if(filters.dataDe && filters.dataAte && filters.dataDe > filters.dataAte){
+        $("emptyTitulo").textContent = "Período inválido.";
+        $("emptyTexto").textContent = '"Data de" está depois de "Data até".';
+      } else {
+        $("emptyTitulo").textContent = "Nenhum item encontrado para os filtros aplicados.";
+        $("emptyTexto").textContent = "Ajuste os filtros ou escolha outro período.";
+      }
+      syncSelecaoUI(rows);
+      return;
     }
-    updateSelectionCount();
+    empty.hidden = true;
+    footer.hidden = false;
 
-    var totalSobra = rows.reduce(function(acc,r){ return acc + calcSobra(r.quantidadeRecebida,r.quantidadeGerada,r.caixasCozinha,r.caixasDevolvidas); }, 0);
-    document.getElementById("summaryRow").innerHTML =
-      '<div class="summary-chip"><b class="num">'+rows.length+'</b><small>itens filtrados</small></div>'+
-      '<div class="summary-chip"><b class="num">'+totalSobra+'</b><small>sobra de caixas (total)</small></div>';
+    var porFornecedor = {};
+    rows.forEach(function(r){
+      var forn = r.fornecedor || "Sem fornecedor";
+      var grupoForn = porFornecedor[forn] || (porFornecedor[forn] = {});
+      var grupo = grupoForn[r.cargaId] || (grupoForn[r.cargaId] = { cargaId:r.cargaId, numeroCarga:r.numeroCarga, dataRecebimento:r.dataRecebimento, itens:[] });
+      grupo.itens.push(r);
+    });
+    var fornecedores = Object.keys(porFornecedor).sort(sortPt);
+    var totalCargas = 0;
+
+    lista.innerHTML = fornecedores.map(function(forn){
+      var cargasObj = porFornecedor[forn];
+      var ids = Object.keys(cargasObj).sort(function(a,b){
+        var cmp = str(cargasObj[b].dataRecebimento).localeCompare(str(cargasObj[a].dataRecebimento));
+        if(cmp!==0) return cmp;
+        return num((getCarga(b)||{}).criadoEm) - num((getCarga(a)||{}).criadoEm);
+      });
+      totalCargas += ids.length;
+      var totalItens = ids.reduce(function(acc,id){ return acc + cargasObj[id].itens.length; }, 0);
+      return '<section class="forn-group">'+
+        '<header class="forn-head"><span class="forn-name">'+escapeHtml(forn)+'</span>'+
+          '<span class="forn-meta">'+plural(ids.length,"carga","cargas")+' · '+plural(totalItens,"item","itens")+'</span></header>'+
+        '<div class="forn-body">'+ids.map(function(id){ return renderCargaConsulta(cargasObj[id]); }).join("")+'</div>'+
+      '</section>';
+    }).join("");
+
+    scroller.scrollTop = scrollTop;
+    footer.textContent = plural(fornecedores.length,"fornecedor","fornecedores")+" · "+plural(totalCargas,"carga","cargas")+" · "+plural(rows.length,"item","itens");
+    syncSelecaoUI(rows);
+  }
+
+  function renderCargaConsulta(grupo){
+    var carga = getCarga(grupo.cargaId);
+    var st = carga ? getCargaStatus(carga) : null;
+    var stClass = st ? statusClass(st) : "";
+    var sobra = grupo.itens.reduce(function(acc,it){ return acc + sobraItem(it); }, 0);
+    var pend = grupo.itens.filter(function(it){ return missingFields(it).length>0; }).length;
+    var expandido = !!expandedCargas[grupo.cargaId];
+    var idAttr = escapeHtml(grupo.cargaId);
+    return '<article class="carga '+stClass+(expandido ? " expanded" : "")+'">'+
+      '<div class="carga-row">'+
+        '<input type="checkbox" data-select-carga="'+idAttr+'" aria-label="Selecionar itens desta carga" title="Selecionar itens desta carga">'+
+        '<button type="button" class="carga-toggle" data-action="toggle-carga" data-carga="'+idAttr+'" aria-expanded="'+expandido+'">'+
+          ic("chevron","chev")+
+          '<span class="carga-title">'+fmtDateBR(grupo.dataRecebimento)+(grupo.numeroCarga ? ' <span class="carga-num">· Nº '+escapeHtml(grupo.numeroCarga)+'</span>' : '')+'</span>'+
+          '<span class="carga-stats"><span>'+plural(grupo.itens.length,"item","itens")+'</span><span class="'+(sobra<0 ? "neg" : "")+'">sobra '+fmtNum(sobra)+'</span></span>'+
+          '<span class="carga-badges">'+
+            (pend ? '<span class="badge pend">'+ic("alert")+pend+(pend===1 ? " pendente" : " pendentes")+'</span>' : '')+
+            (st ? '<span class="badge dot '+stClass+'">'+escapeHtml(st)+'</span>' : '')+
+          '</span>'+
+        '</button>'+
+        '<div class="carga-actions">'+
+          '<button type="button" class="icon-btn" title="Adicionar itens a esta carga" aria-label="Adicionar itens a esta carga" data-action="add-itens" data-carga="'+idAttr+'">'+ic("plus")+'</button>'+
+          '<button type="button" class="icon-btn" title="Editar fornecedor, nº e data da carga" aria-label="Editar dados da carga" data-action="edit-carga" data-carga="'+idAttr+'">'+ic("edit")+'</button>'+
+        '</div>'+
+      '</div>'+
+      (expandido ? '<div class="carga-items">'+renderItensDaCargaConsulta(grupo.itens)+'</div>' : '')+
+    '</article>';
   }
 
   function renderItensDaCargaConsulta(itens){
     return '<table><thead><tr>'+
-      '<th>Ações</th><th>PLU</th><th class="desc">Descrição</th><th>Embalagem</th><th>Qtd</th><th>Qtd gerada</th><th>Lote</th><th>Tipo</th>'+
-      '<th>Cx cozinha</th><th>Cx devolvidas</th><th>Sobra</th><th>NF devolução</th><th>NF assinada</th>'+
-      '<th>Status</th><th>NF entrada</th><th>Horário</th><th class="obs">Observação</th>'+
+      '<th><span class="sr-only">Seleção e ações</span></th><th>PLU</th><th>Descrição</th><th>Embalagem</th>'+
+      '<th class="t-num">Qtd</th><th class="t-num">Gerada</th><th class="t-num">Cozinha</th><th class="t-num">Devolv.</th><th class="t-num">Sobra</th>'+
+      '<th>Lote</th><th>Tipo</th><th>Status</th><th>NF entrada</th><th>NF devolução</th><th>NF assinada</th><th>Horário</th><th>Pendências</th><th>Observação</th>'+
       '</tr></thead><tbody>'+
       itens.map(function(r){
-        var sobra = calcSobra(r.quantidadeRecebida, r.quantidadeGerada, r.caixasCozinha, r.caixasDevolvidas);
-        var stClass = STATUS_CLASS[r.status] || "st-blue";
-        var itemRef = r.cargaId+"|"+r.id;
-        return '<tr>'+
-          '<td class="row-actions"><input class="select-item" type="checkbox" data-select-item="'+itemRef+'"'+(selectedItems[itemRef]?" checked":"")+'>'+
-            '<button class="icon-btn" title="Editar" data-edit-consulta="'+itemRef+'">✎</button>'+
-            '<button class="icon-btn danger" title="Excluir" data-del-consulta="'+itemRef+'">🗑</button>'+
-          '</td>'+
-          '<td class="num">'+escapeHtml(r.plu)+'</td>'+
-          '<td class="desc">'+escapeHtml(r.descricao)+'</td>'+
+        var sobra = sobraItem(r);
+        var st = statusDoItem(r);
+        var ref = r.cargaId+"|"+r.id;
+        var miss = missingFields(r);
+        var cargaAttr = escapeHtml(r.cargaId), itemAttr = escapeHtml(r.id);
+        return '<tr class="'+(miss.length ? "pend" : "")+'">'+
+          '<td><div class="t-actions-in">'+
+            '<input type="checkbox" data-select-item="'+escapeHtml(ref)+'" aria-label="Selecionar item"'+(selectedItems[ref] ? " checked" : "")+'>'+
+            '<button type="button" class="icon-btn" title="Editar" aria-label="Editar item" data-action="edit-item" data-carga="'+cargaAttr+'" data-item="'+itemAttr+'">'+ic("edit")+'</button>'+
+            '<button type="button" class="icon-btn danger" title="Excluir" aria-label="Excluir item" data-action="del-item" data-carga="'+cargaAttr+'" data-item="'+itemAttr+'">'+ic("trash")+'</button>'+
+          '</div></td>'+
+          '<td class="t-mono">'+escapeHtml(r.plu)+'</td>'+
+          '<td class="wrap">'+escapeHtml(r.descricao)+'</td>'+
           '<td>'+escapeHtml(r.embalagem)+'</td>'+
-          '<td class="num">'+escapeHtml(r.quantidadeRecebida)+'</td>'+
-          '<td class="num">'+escapeHtml(r.quantidadeGerada)+'</td>'+
+          '<td class="t-num">'+escapeHtml(r.quantidadeRecebida)+'</td>'+
+          '<td class="t-num">'+escapeHtml(r.quantidadeGerada)+'</td>'+
+          '<td class="t-num">'+escapeHtml(r.caixasCozinha)+'</td>'+
+          '<td class="t-num">'+escapeHtml(r.caixasDevolvidas)+'</td>'+
+          '<td class="t-num'+(sobra<0 ? " neg" : "")+'">'+fmtNum(sobra)+'</td>'+
           '<td>'+escapeHtml(r.lote)+'</td>'+
-          '<td><span class="badge tipo">'+escapeHtml(r.tipoCarga||"—")+'</span></td>'+
-          '<td class="num">'+escapeHtml(r.caixasCozinha)+'</td>'+
-          '<td class="num">'+escapeHtml(r.caixasDevolvidas)+'</td>'+
-          '<td class="num">'+sobra+'</td>'+
+          '<td>'+(r.tipoCarga ? '<span class="badge tipo">'+escapeHtml(r.tipoCarga)+'</span>' : '')+'</td>'+
+          '<td><span class="badge dot '+statusClass(st)+'">'+escapeHtml(st)+'</span></td>'+
+          '<td>'+escapeHtml(r.nfEntrada)+'</td>'+
           '<td>'+escapeHtml(r.nfDevolucao)+'</td>'+
           '<td>'+escapeHtml(r.nfDevolucaoAssinada)+'</td>'+
-          '<td><span class="badge '+stClass+'">'+escapeHtml(r.status)+'</span></td>'+
-          '<td>'+escapeHtml(r.nfEntrada)+'</td>'+
           '<td>'+escapeHtml(r.horarioGeracao)+'</td>'+
+          '<td>'+badgePendencias(miss)+'</td>'+
           '<td class="obs">'+escapeHtml(r.observacao)+'</td>'+
         '</tr>';
       }).join("") +
       '</tbody></table>';
   }
 
+  // Atualiza checkboxes, contagem e botão de aplicar sem redesenhar a lista.
+  function syncSelecaoUI(rows){
+    var porCarga = {};
+    var selecionados = 0;
+    rows.forEach(function(r){
+      var pc = porCarga[r.cargaId] || (porCarga[r.cargaId] = { total:0, sel:0 });
+      pc.total++;
+      if(selectedItems[r.cargaId+"|"+r.id]){ pc.sel++; selecionados++; }
+    });
+    document.querySelectorAll("[data-select-carga]").forEach(function(cb){
+      var pc = porCarga[cb.getAttribute("data-select-carga")] || { total:0, sel:0 };
+      cb.checked = pc.total>0 && pc.sel===pc.total;
+      cb.indeterminate = pc.sel>0 && pc.sel<pc.total;
+    });
+    document.querySelectorAll("[data-select-item]").forEach(function(cb){
+      cb.checked = !!selectedItems[cb.getAttribute("data-select-item")];
+    });
+    var all = $("selecionarTodosConsulta");
+    all.checked = rows.length>0 && selecionados===rows.length;
+    all.indeterminate = selecionados>0 && selecionados<rows.length;
+    all.disabled = rows.length===0;
+    $("selectionCount").textContent = selecionados===0 ? "Nenhum item selecionado" : plural(selecionados,"item selecionado","itens selecionados");
+    $("btnAplicarStatus").disabled = selecionados===0;
+  }
+
+  function renderResumoCargas(){
+    $("resumoPeriodo").textContent = "Período: "+descricaoPeriodo();
+    var porFornecedor = {};
+    state.cargas.forEach(function(carga){
+      if(!Array.isArray(carga.itens) || carga.itens.length===0 || !dentroPeriodo(carga.dataRecebimento)) return;
+      var forn = carga.fornecedor || "Sem fornecedor";
+      var r = porFornecedor[forn] || (porFornecedor[forn] = { cargas:0, itens:0, volumes:0, sobra:0 });
+      r.cargas++;
+      r.itens += carga.itens.length;
+      carga.itens.forEach(function(it){ r.volumes += num(it.quantidadeRecebida); r.sobra += sobraItem(it); });
+    });
+    var fornecedores = Object.keys(porFornecedor).sort(sortPt);
+    var body = $("resumoCargasBody");
+    if(fornecedores.length===0){
+      body.innerHTML = '<div class="empty-state">'+ic("package")+'<b>Nenhuma carga no período.</b>As cargas só aparecem aqui depois que pelo menos um item for inserido.</div>';
+      return;
+    }
+    var tot = { cargas:0, itens:0, volumes:0, sobra:0 };
+    var linhas = fornecedores.map(function(forn){
+      var r = porFornecedor[forn];
+      tot.cargas += r.cargas; tot.itens += r.itens; tot.volumes += r.volumes; tot.sobra += r.sobra;
+      return '<tr><td class="wrap">'+escapeHtml(forn)+'</td><td class="t-num">'+fmtNum(r.cargas)+'</td><td class="t-num">'+fmtNum(r.itens)+'</td><td class="t-num">'+fmtNum(r.volumes)+'</td><td class="t-num'+(r.sobra<0?" neg":"")+'">'+fmtNum(r.sobra)+'</td></tr>';
+    }).join("");
+    body.innerHTML = '<div class="table-scroll" style="max-height:60vh;border:1px solid var(--border);border-radius:10px;"><table>'+
+      '<thead><tr><th>Fornecedor</th><th class="t-num">Cargas</th><th class="t-num">Itens</th><th class="t-num">Volumes recebidos</th><th class="t-num">Sobra</th></tr></thead>'+
+      '<tbody>'+linhas+'</tbody>'+
+      '<tfoot><tr><td>Total</td><td class="t-num">'+fmtNum(tot.cargas)+'</td><td class="t-num">'+fmtNum(tot.itens)+'</td><td class="t-num">'+fmtNum(tot.volumes)+'</td><td class="t-num">'+fmtNum(tot.sobra)+'</td></tr></tfoot>'+
+    '</table></div>';
+  }
+
   function renderAll(){
-    switchTab(activeTab);
-    renderStats();
     renderFornecedoresDatalist();
     renderFornecedoresTab();
-    renderCargaAtivaBar();
+    renderCargaAtiva();
     renderConsulta();
   }
 
-  function updateSelectionCount(){
-    var count = Object.keys(selectedItems).length;
-    document.getElementById("selectionCount").textContent = count + (count===1 ? " item selecionado" : " itens selecionados");
-  }
-
+  /* ============ Ações ============ */
   function aplicarStatusEmMassa(){
-    var status = document.getElementById("statusEmMassa").value;
+    var status = $("statusEmMassa").value;
     var refs = Object.keys(selectedItems);
     if(refs.length===0){ toast("Selecione pelo menos um item.", true); return; }
-    if(!status){ toast("Selecione o novo status.", true); return; }
+    if(!status){ toast("Escolha o novo status.", true); $("statusEmMassa").focus(); return; }
     var itensPorCarga = {};
+    var atualizados = 0;
     refs.forEach(function(ref){
       var parts = ref.split("|");
       var carga = getCarga(parts[0]);
-      if(!carga) return;
-      var item = carga.itens.find(function(currentItem){ return currentItem.id===parts[1]; });
-      if(item){
-        item.status = status;
-        item.atualizadoEm = Date.now();
-        (itensPorCarga[parts[0]] = itensPorCarga[parts[0]]||[]).push(item);
-      }
+      var item = carga && carga.itens.find(function(it){ return it.id===parts[1]; });
+      if(!item) return;
+      item.status = status;
+      item.atualizadoEm = Date.now();
+      (itensPorCarga[parts[0]] = itensPorCarga[parts[0]] || []).push(item);
+      atualizados++;
     });
-    Object.keys(itensPorCarga).forEach(function(cargaId){
-      syncItensUpdateRemote(cargaId, itensPorCarga[cargaId]);
-    });
+    Object.keys(itensPorCarga).forEach(function(cargaId){ syncItensUpdateRemote(cargaId, itensPorCarga[cargaId]); });
     selectedItems = {};
-    document.getElementById("statusEmMassa").value = "";
+    $("statusEmMassa").value = "";
     saveState();
-    toast(refs.length + (refs.length===1 ? " item atualizado." : " itens atualizados."));
+    toast(plural(atualizados,"item atualizado","itens atualizados")+' para "'+status+'".');
   }
 
-  /* ============ Colagem de dados ============ */
   function parseLine(line){
     var parts = line.split("\t");
-    if(parts.length<2) parts = line.split(",");
     if(parts.length<2) parts = line.split(";");
+    if(parts.length<2) parts = line.split(",");
     parts = parts.map(function(p){ return p.trim(); });
-    return { plu: parts[0]||"", descricao: parts[1]||"", embalagem: parts[2]||"", quantidade: parts[3]||"" };
+    return { plu: parts[0]||"", descricao: parts[1]||"", embalagem: parts[2]||"", quantidade: normalizarNumeroColado(parts[3]) };
   }
-
-  function handlePaste(){
-    setTimeout(function(){
-      var area = document.getElementById("pasteArea");
-      var text = area.value.trim();
-      if(!text) return;
-      var lines = text.split("\n").map(function(l){ return l.trim(); }).filter(Boolean);
-      if(lines.length===0) return;
-
-      if(lines.length===1){
-        var p = parseLine(lines[0]);
-        document.getElementById("itPlu").value = p.plu;
-        document.getElementById("itDescricao").value = p.descricao;
-        document.getElementById("itEmbalagem").value = p.embalagem;
-        document.getElementById("itQuantidade").value = p.quantidade;
-        atualizarSobraForm();
-        area.value = "";
-        saveDraft();
-        document.getElementById("itLote").focus();
-      } else {
-        var carga = getCarga(currentCargaId);
-        if(!carga){ toast("Inicie uma carga antes de colar vários itens.", true); return; }
-        var novosItensColados = [];
-        lines.forEach(function(line){
-          var p = parseLine(line);
-          if(!p.plu && !p.descricao) return;
-          var novoItem = {
-            id: uid(), plu:p.plu, descricao:p.descricao, embalagem:p.embalagem, quantidadeRecebida:p.quantidade,
-            quantidadeGerada:"", lote:"", tipoCarga:"", caixasCozinha:"", caixasDevolvidas:"", nfDevolucao:"", nfDevolucaoAssinada:"",
-            status:"Em contagem", nfEntrada:"", horarioGeracao:"", observacao:"", criadoEm: Date.now()
-          };
-          carga.itens.push(novoItem);
-          novosItensColados.push(novoItem);
-        });
-        area.value = "";
-        syncItensAddRemote(currentCargaId, novosItensColados);
-        saveState();
-        saveDraft();
-        toast(lines.length + " itens adicionados. Complete os campos pendentes na lista abaixo.");
-      }
-    }, 0);
+  function normalizarNumeroColado(v){
+    v = str(v).replace(/\s/g,"");
+    if(/^-?\d+(,\d+)?$/.test(v)) return v.replace(",",".");
+    if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(v)) return v.replace(/\./g,"").replace(",",".");
+    return v;
   }
+  function processarColagem(silencioso){
+    var area = $("pasteArea");
+    var text = area.value.trim();
+    if(!text){ if(!silencioso) toast("Cole ou digite as linhas do sistema primeiro.", true); return; }
+    var lines = text.split(/\r?\n/).map(function(l){ return l.trim(); }).filter(Boolean)
+      .filter(function(l){ return parseLine(l).plu.toLowerCase()!=="plu"; }); // ignora linha de cabeçalho
+    if(lines.length===0) return;
 
-  function atualizarSobraForm(){
-    var q = document.getElementById("itQuantidade").value;
-    var g = document.getElementById("itQuantidadeGerada").value;
-    var c = document.getElementById("itCaixasCozinha").value;
-    var d = document.getElementById("itCaixasDevolvidas").value;
-    document.getElementById("itSobra").value = calcSobra(q,g,c,d);
-  }
-  function atualizarSobraModal(){
-    var q = document.getElementById("emQuantidade").value;
-    var g = document.getElementById("emQuantidadeGerada").value;
-    var c = document.getElementById("emCaixasCozinha").value;
-    var d = document.getElementById("emCaixasDevolvidas").value;
-    document.getElementById("emSobra").value = calcSobra(q,g,c,d);
-  }
-
-  function limparFormItem(){
-    ["itPlu","itDescricao","itEmbalagem","itQuantidade","itQuantidadeGerada","itLote","itCaixasCozinha","itCaixasDevolvidas",
-     "itNfDevolucao","itNfEntrada","itHorario","itObservacao"].forEach(function(id){
-      document.getElementById(id).value = "";
+    if(lines.length===1){
+      var p = parseLine(lines[0]);
+      $("it-plu").value = p.plu;
+      $("it-descricao").value = p.descricao;
+      $("it-embalagem").value = p.embalagem;
+      $("it-quantidadeRecebida").value = p.quantidade;
+      atualizarSobra("it");
+      area.value = "";
+      saveDraft();
+      $("it-quantidadeGerada").focus();
+      return;
+    }
+    var carga = getCarga(currentCargaId);
+    if(!carga){ toast("Inicie uma carga antes de colar vários itens.", true); return; }
+    var novos = [];
+    lines.forEach(function(line){
+      var p = parseLine(line);
+      if(!p.plu && !p.descricao) return;
+      novos.push({
+        id: uid(), plu:p.plu, descricao:p.descricao, embalagem:p.embalagem, quantidadeRecebida:p.quantidade,
+        quantidadeGerada:"", lote:"", tipoCarga:"", caixasCozinha:"", caixasDevolvidas:"", nfDevolucao:"", nfDevolucaoAssinada:"",
+        status:STATUS_PADRAO, nfEntrada:"", horarioGeracao:"", observacao:"", criadoEm: Date.now()
+      });
     });
-    document.getElementById("itTipoCarga").value = "";
-    document.getElementById("itNfAssinada").value = "";
-    document.getElementById("itStatus").value = "Em contagem";
-    document.getElementById("itSobra").value = "0";
+    if(novos.length===0){ toast("Nenhuma linha válida encontrada (cada linha precisa de PLU ou descrição).", true); return; }
+    Array.prototype.push.apply(carga.itens, novos);
+    area.value = "";
+    syncItensAddRemote(currentCargaId, novos);
+    saveState();
+    saveDraft();
+    toast(plural(novos.length,"item adicionado","itens adicionados")+". Complete os campos pendentes na lista.");
   }
 
   function adicionarItensCarga(cargaId){
@@ -1608,435 +2005,391 @@
     currentCargaId = cargaId;
     saveDraft();
     switchTab("cadastro");
-    renderCargaAtivaBar();
-    toast('Carga de '+(carga.fornecedor||"—")+' selecionada. Adicione os novos itens abaixo.');
-    document.getElementById("itPlu").focus();
+    renderCargaAtiva();
+    window.scrollTo(0, 0);
+    toast("Carga de "+(carga.fornecedor||"—")+" selecionada. Adicione os novos itens.");
+    $("it-plu").focus();
   }
-
-  /* ============ Eventos: Carga ============ */
-  document.getElementById("cargaForm").addEventListener("submit", function(e){
-    e.preventDefault();
-    var fornecedor = document.getElementById("cgFornecedor").value.trim();
-    if(!fornecedor){
-      toast("Informe o fornecedor para iniciar a carga.", true);
-      document.getElementById("cgFornecedor").focus();
-      return;
-    }
-    var carga = {
-      id: uid(),
-      dataRecebimento: document.getElementById("cgData").value || todayISO(),
-      numeroCarga: document.getElementById("cgNumero").value.trim(),
-      fornecedor: fornecedor,
-      criadoEm: Date.now(),
-      itens: []
-    };
-    adicionarFornecedor(fornecedor);
-    state.cargas.push(carga);
-    currentCargaId = carga.id;
-    criarCargaRemota(carga);
-    document.getElementById("cgNumero").value = "";
-    document.getElementById("cgFornecedor").value = "";
-    document.getElementById("cgData").value = todayISO();
-    saveState();
-    saveDraft();
-    toast("Carga iniciada. Agora adicione os itens.");
-    document.getElementById("itPlu").focus();
-  });
-
-  document.getElementById("btnTrocarCarga").addEventListener("click", function(){
-    currentCargaId = null;
-    saveDraft();
-    renderCargaAtivaBar();
-  });
-
-  document.getElementById("btnEditarCargaAtiva").addEventListener("click", function(){
-    abrirModalCarga(currentCargaId);
-  });
-
-  /* ============ Eventos: Item (form de adição) ============ */
-  document.getElementById("pasteArea").addEventListener("paste", handlePaste);
-
-  ["itQuantidade","itQuantidadeGerada","itCaixasCozinha","itCaixasDevolvidas"].forEach(function(id){
-    document.getElementById(id).addEventListener("input", atualizarSobraForm);
-  });
-
-  document.querySelectorAll("#cargaForm input, #itemForm input, #itemForm select, #itemForm textarea, #pasteArea").forEach(function(field){
-    field.addEventListener("input", saveDraft);
-    field.addEventListener("change", saveDraft);
-  });
-
-  document.getElementById("itemForm").addEventListener("submit", function(e){
-    e.preventDefault();
-    var carga = getCarga(currentCargaId);
-    if(!carga){ toast("Inicie uma carga primeiro.", true); return; }
-    var item = {
-      id: uid(),
-      plu: document.getElementById("itPlu").value.trim(),
-      descricao: document.getElementById("itDescricao").value.trim(),
-      embalagem: document.getElementById("itEmbalagem").value.trim(),
-      quantidadeRecebida: document.getElementById("itQuantidade").value,
-      quantidadeGerada: document.getElementById("itQuantidadeGerada").value,
-      lote: document.getElementById("itLote").value.trim(),
-      tipoCarga: document.getElementById("itTipoCarga").value,
-      caixasCozinha: document.getElementById("itCaixasCozinha").value,
-      caixasDevolvidas: document.getElementById("itCaixasDevolvidas").value,
-      nfDevolucao: document.getElementById("itNfDevolucao").value.trim(),
-      nfDevolucaoAssinada: document.getElementById("itNfAssinada").value,
-      status: document.getElementById("itStatus").value,
-      nfEntrada: document.getElementById("itNfEntrada").value.trim(),
-      horarioGeracao: document.getElementById("itHorario").value,
-      observacao: document.getElementById("itObservacao").value.trim(),
-      criadoEm: Date.now()
-    };
-    carga.itens.push(item);
-    limparFormItem();
-    syncItemAddRemote(currentCargaId, item);
-    saveState();
-    saveDraft();
-    var miss = missingFields(item);
-    toast(miss.length>0 ? "Item adicionado com "+miss.length+" campo(s) pendente(s)." : "Item adicionado.");
-    document.getElementById("itPlu").focus();
-  });
-
-  document.getElementById("btnLimparItem").addEventListener("click", limparFormItem);
-
-  document.getElementById("tbodyAtivos").addEventListener("click", function(e){
-    var editId = e.target.getAttribute("data-edit-item");
-    var delId = e.target.getAttribute("data-del-item");
-    if(editId) abrirModalItem(currentCargaId, editId);
-    if(delId) excluirItem(currentCargaId, delId);
-  });
-
-  /* ============ Eventos: Consulta / Filtros ============ */
-  var filterMap = { fDataDe:"dataDe", fDataAte:"dataAte", fDescricao:"descricao", fFornecedor:"fornecedor", fTipoCarga:"tipoCarga", fNfDevolucao:"nfDevolucao" };
-  Object.keys(filterMap).forEach(function(id){
-    document.getElementById(id).addEventListener("input", function(){
-      filters[filterMap[id]] = document.getElementById(id).value;
-      renderConsulta();
-    });
-    document.getElementById(id).addEventListener("change", function(){
-      filters[filterMap[id]] = document.getElementById(id).value;
-      renderConsulta();
-    });
-  });
-  document.getElementById("btnLimparFiltros").addEventListener("click", function(){
-    document.getElementById("fDataDe").value = todayISO();
-    document.getElementById("fDataAte").value = todayISO();
-    ["fDescricao","fFornecedor","fTipoCarga","fNfDevolucao"].forEach(function(id){ document.getElementById(id).value = ""; });
-    filters = { dataDe:todayISO(), dataAte:todayISO(), descricao:"", fornecedor:"", tipoCarga:"", nfDevolucao:"" };
-    renderConsulta();
-  });
-
-  document.getElementById("tbodyConsulta").addEventListener("click", function(e){
-    var editRef = e.target.getAttribute("data-edit-consulta");
-    var delRef = e.target.getAttribute("data-del-consulta");
-    if(editRef){ var p = editRef.split("|"); abrirModalItem(p[0], p[1]); }
-    if(delRef){ var d = delRef.split("|"); excluirItem(d[0], d[1]); }
-    var editCargaBtn = e.target.closest("[data-edit-carga]");
-    if(editCargaBtn){ abrirModalCarga(editCargaBtn.getAttribute("data-edit-carga")); return; }
-    var addItensBtn = e.target.closest("[data-add-itens]");
-    if(addItensBtn){ adicionarItensCarga(addItensBtn.getAttribute("data-add-itens")); return; }
-    var toggleBtn = e.target.closest("[data-toggle-carga]");
-    if(toggleBtn){
-      var cargaId = toggleBtn.getAttribute("data-toggle-carga");
-      if(expandedCargas[cargaId]) delete expandedCargas[cargaId];
-      else expandedCargas[cargaId] = true;
-      renderConsulta();
-    }
-  });
-
-  document.getElementById("tbodyConsulta").addEventListener("change", function(e){
-    var itemRef = e.target.getAttribute("data-select-item");
-    if(!itemRef) return;
-    if(e.target.checked) selectedItems[itemRef] = true;
-    else delete selectedItems[itemRef];
-    updateSelectionCount();
-    var rows = applyFilters(getFlatRows());
-    var selectedVisible = rows.filter(function(row){ return selectedItems[row.cargaId+"|"+row.id]; }).length;
-    var selectAll = document.getElementById("selecionarTodosConsulta");
-    selectAll.checked = selectedVisible===rows.length && rows.length>0;
-    selectAll.indeterminate = selectedVisible>0 && selectedVisible<rows.length;
-  });
-
-  document.getElementById("selecionarTodosConsulta").addEventListener("change", function(e){
-    var rows = applyFilters(getFlatRows());
-    rows.forEach(function(row){
-      var itemRef = row.cargaId+"|"+row.id;
-      if(e.target.checked) selectedItems[itemRef] = true;
-      else delete selectedItems[itemRef];
-    });
-    renderConsulta();
-  });
-  document.getElementById("btnAplicarStatus").addEventListener("click", aplicarStatusEmMassa);
-
-  /* ============ Eventos: Fornecedores ============ */
-  document.getElementById("fornecedorForm").addEventListener("submit", function(e){
-    e.preventDefault();
-    var input = document.getElementById("fnNome");
-    var nome = input.value.trim();
-    if(!nome){ toast("Informe o nome do fornecedor.", true); return; }
-    if(fornecedorExiste(nome)){ toast("Esse fornecedor já está cadastrado.", true); input.value=""; input.focus(); return; }
-    adicionarFornecedor(nome);
-    saveState();
-    input.value = "";
-    toast("Fornecedor adicionado.");
-    input.focus();
-  });
-
-  document.getElementById("listaFornecedores").addEventListener("click", function(e){
-    var nome = e.target.getAttribute("data-del-fornecedor");
-    var renomear = e.target.getAttribute("data-rename-fornecedor");
-    if(nome) removerFornecedor(nome);
-    if(renomear) renomearFornecedor(renomear);
-  });
-
-  /* ============ Controle geral de modais ============ */
-  function lockBackground(){
-    document.querySelector("header.topbar").setAttribute("inert","");
-    document.querySelector("nav.tabs").setAttribute("inert","");
-    document.querySelector("main").setAttribute("inert","");
-    document.body.style.overflow = "hidden";
-  }
-  function unlockBackground(){
-    document.querySelector("header.topbar").removeAttribute("inert");
-    document.querySelector("nav.tabs").removeAttribute("inert");
-    document.querySelector("main").removeAttribute("inert");
-    document.body.style.overflow = "";
-  }
-  function fecharTodosModais(){
-    document.getElementById("modalItemBackdrop").hidden = true;
-    document.getElementById("modalCargaBackdrop").hidden = true;
-    document.getElementById("modalResumoCargasBackdrop").hidden = true;
-    editItemRef = null;
-    editCargaRef = null;
-    unlockBackground();
-  }
-  document.addEventListener("keydown", function(e){
-    if(e.key==="Escape") fecharTodosModais();
-  });
-  document.getElementById("modalItemBackdrop").addEventListener("click", function(e){
-    if(e.target===this) fecharModalItem();
-  });
-  document.getElementById("modalCargaBackdrop").addEventListener("click", function(e){
-    if(e.target===this) fecharModalCarga();
-  });
-  document.getElementById("modalResumoCargasBackdrop").addEventListener("click", function(e){
-    if(e.target===this) fecharModalResumoCargas();
-  });
-
-  document.getElementById("statsRow").addEventListener("click", function(e){
-    if(!e.target.closest("[data-open-resumo-cargas]")) return;
-    renderResumoCargas();
-    document.getElementById("modalResumoCargasBackdrop").hidden = false;
-    lockBackground();
-  });
-  function fecharModalResumoCargas(){ fecharTodosModais(); }
-  document.getElementById("closeModalResumoCargas").addEventListener("click", fecharModalResumoCargas);
-  document.getElementById("fecharModalResumoCargas").addEventListener("click", fecharModalResumoCargas);
-
-  /* ============ Modal item ============ */
-  function abrirModalItem(cargaId, itemId){
-    var carga = getCarga(cargaId);
-    if(!carga) return;
-    var item = carga.itens.find(function(it){ return it.id===itemId; });
-    if(!item) return;
-    fecharTodosModais();
-    editItemRef = { cargaId: cargaId, itemId: itemId };
-    document.getElementById("emPlu").value = item.plu||"";
-    document.getElementById("emDescricao").value = item.descricao||"";
-    document.getElementById("emEmbalagem").value = item.embalagem||"";
-    document.getElementById("emQuantidade").value = item.quantidadeRecebida||"";
-    document.getElementById("emQuantidadeGerada").value = item.quantidadeGerada||"";
-    document.getElementById("emLote").value = item.lote||"";
-    document.getElementById("emTipoCarga").value = item.tipoCarga||"";
-    document.getElementById("emCaixasCozinha").value = item.caixasCozinha||"";
-    document.getElementById("emCaixasDevolvidas").value = item.caixasDevolvidas||"";
-    document.getElementById("emNfDevolucao").value = item.nfDevolucao||"";
-    document.getElementById("emNfAssinada").value = item.nfDevolucaoAssinada||"";
-    document.getElementById("emStatus").value = item.status||"Em contagem";
-    document.getElementById("emNfEntrada").value = item.nfEntrada||"";
-    document.getElementById("emHorario").value = item.horarioGeracao||"";
-    document.getElementById("emObservacao").value = item.observacao||"";
-    atualizarSobraModal();
-    document.getElementById("modalItemBackdrop").hidden = false;
-    lockBackground();
-    document.getElementById("emPlu").focus();
-  }
-  function fecharModalItem(){ fecharTodosModais(); }
-
-  ["emQuantidade","emQuantidadeGerada","emCaixasCozinha","emCaixasDevolvidas"].forEach(function(id){
-    document.getElementById(id).addEventListener("input", atualizarSobraModal);
-  });
-  document.getElementById("closeModalItem").addEventListener("click", fecharModalItem);
-  document.getElementById("cancelModalItem").addEventListener("click", fecharModalItem);
-
-  document.getElementById("salvarModalItem").addEventListener("click", function(){
-    if(!editItemRef) return;
-    var carga = getCarga(editItemRef.cargaId);
-    if(!carga) return;
-    var item = carga.itens.find(function(it){ return it.id===editItemRef.itemId; });
-    if(!item) return;
-    item.plu = document.getElementById("emPlu").value.trim();
-    item.descricao = document.getElementById("emDescricao").value.trim();
-    item.embalagem = document.getElementById("emEmbalagem").value.trim();
-    item.quantidadeRecebida = document.getElementById("emQuantidade").value;
-    item.quantidadeGerada = document.getElementById("emQuantidadeGerada").value;
-    item.lote = document.getElementById("emLote").value.trim();
-    item.tipoCarga = document.getElementById("emTipoCarga").value;
-    item.caixasCozinha = document.getElementById("emCaixasCozinha").value;
-    item.caixasDevolvidas = document.getElementById("emCaixasDevolvidas").value;
-    item.nfDevolucao = document.getElementById("emNfDevolucao").value.trim();
-    item.nfDevolucaoAssinada = document.getElementById("emNfAssinada").value;
-    item.status = document.getElementById("emStatus").value;
-    item.nfEntrada = document.getElementById("emNfEntrada").value.trim();
-    item.horarioGeracao = document.getElementById("emHorario").value;
-    item.observacao = document.getElementById("emObservacao").value.trim();
-    item.atualizadoEm = Date.now();
-    var cargaIdSalva = editItemRef.cargaId;
-    fecharModalItem();
-    syncItemUpdateRemote(cargaIdSalva, item.id, item);
-    saveState();
-    toast("Item atualizado.");
-  });
-
-  document.getElementById("btnExcluirItem").addEventListener("click", function(){
-    if(!editItemRef) return;
-    var ref = editItemRef;
-    fecharModalItem();
-    excluirItem(ref.cargaId, ref.itemId);
-  });
 
   function excluirItem(cargaId, itemId){
     var carga = getCarga(cargaId);
-    if(!carga) return;
-    if(!confirm("Excluir este item? Esta ação não pode ser desfeita.")) return;
+    var item = carga && carga.itens.find(function(it){ return it.id===itemId; });
+    if(!item) return false;
+    var nome = item.descricao || item.plu || "este item";
+    if(!confirm('Excluir "'+nome+'"? Esta ação não pode ser desfeita.')) return false;
     carga.itens = carga.itens.filter(function(it){ return it.id!==itemId; });
+    delete selectedItems[cargaId+"|"+itemId];
     syncItemDeleteRemote(cargaId, itemId);
     saveState();
     toast("Item excluído.");
+    return true;
   }
 
-  /* ============ Modal carga ============ */
-  function abrirModalCarga(cargaId){
+  function excluirCarga(cargaId){
     var carga = getCarga(cargaId);
-    if(!carga) return;
-    fecharTodosModais();
-    editCargaRef = { cargaId: cargaId };
-    document.getElementById("ecData").value = carga.dataRecebimento||"";
-    document.getElementById("ecNumero").value = carga.numeroCarga||"";
-    document.getElementById("ecFornecedor").value = carga.fornecedor||"";
-    document.getElementById("modalCargaBackdrop").hidden = false;
-    lockBackground();
-    document.getElementById("ecData").focus();
-  }
-  function fecharModalCarga(){ fecharTodosModais(); }
-  document.getElementById("closeModalCarga").addEventListener("click", fecharModalCarga);
-  document.getElementById("cancelModalCarga").addEventListener("click", fecharModalCarga);
-
-  document.getElementById("salvarModalCarga").addEventListener("click", function(){
-    var cargaId = editCargaRef && editCargaRef.cargaId;
-    var carga = getCarga(cargaId);
-    if(!carga) return;
-    var fornecedor = document.getElementById("ecFornecedor").value.trim();
-    if(!fornecedor){ toast("Fornecedor é obrigatório.", true); return; }
-    adicionarFornecedor(fornecedor);
-    carga.dataRecebimento = document.getElementById("ecData").value;
-    carga.numeroCarga = document.getElementById("ecNumero").value.trim();
-    carga.fornecedor = fornecedor;
-    fecharModalCarga();
-    syncCargaHeaderRemote(cargaId, {
-      fornecedor: fornecedor,
-      dataRecebimento: carga.dataRecebimento,
-      numeroCarga: carga.numeroCarga
-    });
-    saveState();
-    toast("Dados da carga atualizados.");
-  });
-
-  document.getElementById("btnAdicionarItensCarga").addEventListener("click", function(){
-    var cargaId = editCargaRef && editCargaRef.cargaId;
-    if(!cargaId) return;
-    fecharModalCarga();
-    adicionarItensCarga(cargaId);
-  });
-
-  document.getElementById("btnExcluirCarga").addEventListener("click", function(){
-    var cargaId = editCargaRef && editCargaRef.cargaId;
-    if(!cargaId) return;
-    if(!confirm("Excluir esta carga e TODOS os seus itens? Esta ação não pode ser desfeita.")) return;
+    if(!carga) return false;
+    var msg = 'Excluir a carga de "'+(carga.fornecedor||"—")+'" ('+fmtDateBR(carga.dataRecebimento)+') e '+
+      (carga.itens.length ? "todos os seus "+plural(carga.itens.length,"item","itens") : "seus dados")+"? Esta ação não pode ser desfeita.";
+    if(!confirm(msg)) return false;
+    cargasExcluidas[cargaId] = true;
     state.cargas = state.cargas.filter(function(c){ return c.id!==cargaId; });
-    if(currentCargaId===cargaId) currentCargaId = null;
-    fecharModalCarga();
+    delete expandedCargas[cargaId];
+    if(currentCargaId===cargaId){ currentCargaId = null; saveDraft(); }
     deleteCargaRemote(cargaId);
     saveState();
     toast("Carga excluída.");
-  });
+    return true;
+  }
 
-  /* ============ Tema: claro / escuro ============ */
+  /* ============ Modais ============ */
+  function abrirModal(id, focoId){
+    var algumAberto = Array.prototype.some.call(document.querySelectorAll(".modal-backdrop"), function(m){ return !m.hidden; });
+    if(!algumAberto) focoAntesDoModal = document.activeElement;
+    document.querySelectorAll(".modal-backdrop").forEach(function(m){ m.hidden = m.id!==id; });
+    $("app").setAttribute("inert","");
+    document.body.style.overflow = "hidden";
+    var alvo = focoId ? $(focoId) : $(id).querySelector("input,select,textarea,button");
+    if(alvo) alvo.focus();
+  }
+  function fecharModais(){
+    var algumAberto = false;
+    document.querySelectorAll(".modal-backdrop").forEach(function(m){ if(!m.hidden){ m.hidden = true; algumAberto = true; } });
+    editItemRef = null;
+    editCargaRef = null;
+    $("app").removeAttribute("inert");
+    document.body.style.overflow = "";
+    if(algumAberto && focoAntesDoModal && document.contains(focoAntesDoModal)) focoAntesDoModal.focus();
+    focoAntesDoModal = null;
+  }
+  function algumModalAberto(){
+    return Array.prototype.some.call(document.querySelectorAll(".modal-backdrop"), function(m){ return !m.hidden; });
+  }
+
+  function abrirModalItem(cargaId, itemId){
+    var carga = getCarga(cargaId);
+    var item = carga && carga.itens.find(function(it){ return it.id===itemId; });
+    if(!item) return;
+    preencherFormItem("em", item);
+    marcarPendencias("em", "editItemFields");
+    $("modalItemSub").textContent = (carga.fornecedor||"—")+" · "+fmtDateBR(carga.dataRecebimento)+(carga.numeroCarga ? " · Nº "+carga.numeroCarga : "");
+    abrirModal("modalItemBackdrop", "em-plu");
+    editItemRef = { cargaId: cargaId, itemId: itemId };
+  }
+  function salvarModalItem(){
+    if(!editItemRef) return;
+    var carga = getCarga(editItemRef.cargaId);
+    var item = carga && carga.itens.find(function(it){ return it.id===editItemRef.itemId; });
+    if(!item){ toast("Este item não existe mais (pode ter sido excluído por outro operador).", true); fecharModais(); return; }
+    Object.assign(item, lerFormItem("em"), { atualizadoEm: Date.now() });
+    var cargaId = editItemRef.cargaId;
+    fecharModais();
+    syncItensUpdateRemote(cargaId, [item]);
+    saveState();
+    toast("Item atualizado.");
+  }
+
+  function abrirModalCarga(cargaId){
+    var carga = getCarga(cargaId);
+    if(!carga) return;
+    $("ecData").value = carga.dataRecebimento || "";
+    $("ecNumero").value = carga.numeroCarga || "";
+    $("ecFornecedor").value = carga.fornecedor || "";
+    abrirModal("modalCargaBackdrop", "ecData");
+    editCargaRef = { cargaId: cargaId };
+  }
+  function salvarModalCarga(){
+    var cargaId = editCargaRef && editCargaRef.cargaId;
+    var carga = getCarga(cargaId);
+    if(!carga){ toast("Esta carga não existe mais.", true); fecharModais(); return; }
+    var fornecedor = $("ecFornecedor").value.trim();
+    var data = $("ecData").value;
+    if(!fornecedor){ toast("Fornecedor é obrigatório.", true); $("ecFornecedor").focus(); return; }
+    if(!data){ toast("Informe a data de recebimento.", true); $("ecData").focus(); return; }
+    registrarFornecedor(fornecedor);
+    carga.dataRecebimento = data;
+    carga.numeroCarga = $("ecNumero").value.trim();
+    carga.fornecedor = fornecedor;
+    fecharModais();
+    syncCargaHeaderRemote(cargaId, { fornecedor: fornecedor, dataRecebimento: carga.dataRecebimento, numeroCarga: carga.numeroCarga });
+    saveState();
+    toast("Dados da carga atualizados.");
+  }
+
+  /* ============ Tema e menu ============ */
   function aplicarTema(tema){
     document.documentElement.setAttribute("data-theme", tema);
     try{ localStorage.setItem(THEME_KEY, tema); }catch(e){}
-    document.getElementById("btnTemaClaro").classList.toggle("active", tema==="light");
-    document.getElementById("btnTemaEscuro").classList.toggle("active", tema==="dark");
+    var label = tema==="dark" ? "Usar tema claro" : "Usar tema escuro";
+    $("btnTema").title = label;
+    $("btnTema").setAttribute("aria-label", label);
   }
-  function fecharMenuTema(){ document.getElementById("menuTemaDropdown").hidden = true; }
-  document.getElementById("btnMenuTema").addEventListener("click", function(e){
-    e.stopPropagation();
-    var dropdown = document.getElementById("menuTemaDropdown");
-    dropdown.hidden = !dropdown.hidden;
-  });
-  document.getElementById("menuTemaDropdown").addEventListener("click", function(e){ e.stopPropagation(); });
-  document.getElementById("menuTemaDropdown").querySelectorAll("[data-tema]").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      aplicarTema(btn.getAttribute("data-tema"));
-      fecharMenuTema();
+  function toggleMenuBackup(abrir){
+    var dd = $("menuBackupDropdown");
+    if(abrir==null) abrir = dd.hidden;
+    dd.hidden = !abrir;
+    $("btnMenuBackup").setAttribute("aria-expanded", abrir ? "true" : "false");
+  }
+
+  /* ============ Eventos ============ */
+  function bindEvents(){
+    // Navegação
+    document.querySelectorAll(".nav-item").forEach(function(btn){
+      btn.addEventListener("click", function(){ switchTab(btn.getAttribute("data-tab")); window.scrollTo(0,0); });
     });
-  });
-  document.addEventListener("click", fecharMenuTema);
-  document.addEventListener("keydown", function(e){ if(e.key==="Escape") fecharMenuTema(); });
-  aplicarTema(document.documentElement.getAttribute("data-theme")==="dark" ? "dark" : "light");
 
-  /* ============ Backup: menu ============ */
-  function fecharMenuBackup(){ document.getElementById("menuBackupDropdown").hidden = true; }
-  document.getElementById("btnMenuBackup").addEventListener("click", function(e){
-    e.stopPropagation();
-    var dropdown = document.getElementById("menuBackupDropdown");
-    dropdown.hidden = !dropdown.hidden;
-  });
-  document.getElementById("menuBackupDropdown").addEventListener("click", function(e){ e.stopPropagation(); });
-  document.addEventListener("click", fecharMenuBackup);
-  document.addEventListener("keydown", function(e){ if(e.key==="Escape") fecharMenuBackup(); });
+    // Ações delegadas (botões gerados dinamicamente)
+    document.addEventListener("click", function(e){
+      if(!e.target.closest(".menu")) toggleMenuBackup(false);
+      var el = e.target.closest("[data-action]");
+      if(!el) return;
+      var cargaId = el.getAttribute("data-carga");
+      var itemId = el.getAttribute("data-item");
+      switch(el.getAttribute("data-action")){
+        case "edit-item": abrirModalItem(cargaId, itemId); break;
+        case "del-item": excluirItem(cargaId, itemId); break;
+        case "edit-carga": abrirModalCarga(cargaId); break;
+        case "add-itens": adicionarItensCarga(cargaId); break;
+        case "toggle-carga":
+          if(expandedCargas[cargaId]) delete expandedCargas[cargaId]; else expandedCargas[cargaId] = true;
+          renderConsulta();
+          break;
+        case "rename-forn": renomearFornecedor(el.getAttribute("data-nome")); break;
+        case "del-forn": removerFornecedor(el.getAttribute("data-nome")); break;
+        case "consultar-forn": consultarFornecedor(el.getAttribute("data-nome")); break;
+        case "open-resumo": renderResumoCargas(); abrirModal("modalResumoCargasBackdrop"); break;
+        case "range": aplicarPeriodo(el.getAttribute("data-range")); break;
+      }
+    });
 
-  document.getElementById("btnExportarAgora").addEventListener("click", function(){
-    baixarPlanilhaAgora();
-    fecharMenuBackup();
-  });
-  document.getElementById("inputImportar").addEventListener("change", function(e){
-    var file = e.target.files[0];
-    if(file) importarPlanilha(file);
-    e.target.value = "";
-    fecharMenuBackup();
-  });
+    // Carga
+    $("cargaForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      var fornecedor = $("cgFornecedor").value.trim();
+      if(!fornecedor){ toast("Informe o fornecedor para iniciar a carga.", true); $("cgFornecedor").focus(); return; }
+      var carga = {
+        id: uid(),
+        dataRecebimento: $("cgData").value || todayISO(),
+        numeroCarga: $("cgNumero").value.trim(),
+        fornecedor: fornecedor,
+        criadoEm: Date.now(),
+        itens: []
+      };
+      registrarFornecedor(fornecedor);
+      state.cargas.push(carga);
+      currentCargaId = carga.id;
+      criarCargaRemota(carga);
+      $("cgNumero").value = "";
+      $("cgFornecedor").value = "";
+      $("cgData").value = todayISO();
+      saveState();
+      saveDraft();
+      toast("Carga iniciada. Agora adicione os itens.");
+      $("it-plu").focus();
+    });
+    $("btnTrocarCarga").addEventListener("click", function(){
+      currentCargaId = null;
+      saveDraft();
+      renderCargaAtiva();
+      $("cgFornecedor").focus();
+    });
+    $("btnEditarCargaAtiva").addEventListener("click", function(){ abrirModalCarga(currentCargaId); });
 
-  /* ============ Tabs: eventos ============ */
-  document.querySelectorAll("nav.tabs button").forEach(function(btn){
-    btn.addEventListener("click", function(){ switchTab(btn.dataset.tab); });
-  });
+    // Item (cadastro)
+    $("pasteArea").addEventListener("paste", function(){ setTimeout(function(){ processarColagem(true); }, 0); });
+    $("pasteArea").addEventListener("keydown", function(e){
+      if(e.key==="Enter" && (e.ctrlKey || e.metaKey)){ e.preventDefault(); processarColagem(false); }
+    });
+    $("btnProcessarColagem").addEventListener("click", function(){ processarColagem(false); });
+
+    QTD_KEYS.forEach(function(k){
+      $("it-"+k).addEventListener("input", function(){ atualizarSobra("it"); });
+      $("em-"+k).addEventListener("input", function(){ atualizarSobra("em"); });
+    });
+    $("editItemFields").addEventListener("input", function(){ marcarPendencias("em", "editItemFields"); });
+    $("editItemFields").addEventListener("change", function(){ marcarPendencias("em", "editItemFields"); });
+
+    document.querySelectorAll("#cargaForm input, #itemForm input, #itemForm select, #itemForm textarea").forEach(function(field){
+      field.addEventListener("input", saveDraft);
+      field.addEventListener("change", saveDraft);
+    });
+
+    $("itemForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      var carga = getCarga(currentCargaId);
+      if(!carga){ toast("Inicie uma carga primeiro.", true); return; }
+      var dados = lerFormItem("it");
+      if(vazio(dados.plu) && vazio(dados.descricao)){
+        toast("Informe pelo menos o PLU ou a descrição do produto.", true);
+        $("it-plu").focus();
+        return;
+      }
+      var item = Object.assign({ id: uid(), criadoEm: Date.now() }, dados);
+      carga.itens.push(item);
+      limparFormItem("it");
+      syncItensAddRemote(currentCargaId, [item]);
+      saveState();
+      saveDraft();
+      var miss = missingFields(item);
+      toast(miss.length>0 ? "Item adicionado com "+plural(miss.length,"campo pendente","campos pendentes")+"." : "Item adicionado.");
+      $("it-plu").focus();
+    });
+    $("btnLimparItem").addEventListener("click", function(){ limparFormItem("it"); saveDraft(); $("it-plu").focus(); });
+
+    // Filtros
+    var filterMap = { fDataDe:"dataDe", fDataAte:"dataAte", fDescricao:"descricao", fFornecedor:"fornecedor", fTipoCarga:"tipoCarga", fNfDevolucao:"nfDevolucao" };
+    Object.keys(filterMap).forEach(function(id){
+      function atualizar(){
+        if(filters[filterMap[id]]===$(id).value) return;
+        filters[filterMap[id]] = $(id).value;
+        renderConsulta();
+      }
+      $(id).addEventListener("input", atualizar);
+      $(id).addEventListener("change", atualizar);
+    });
+    $("btnLimparFiltros").addEventListener("click", function(){
+      ["fDescricao","fFornecedor","fTipoCarga","fNfDevolucao"].forEach(function(id){ $(id).value = ""; });
+      filters.descricao = filters.fornecedor = filters.tipoCarga = filters.nfDevolucao = "";
+      aplicarPeriodo("hoje");
+    });
+    $("btnExportarFiltrados").addEventListener("click", function(){
+      exportar(applyFilters(getFlatRows()), "cargas_FLV_"+todayISO()+".xlsx");
+    });
+
+    // Seleção e status em massa
+    $("tbodyConsulta").addEventListener("change", function(e){
+      var t = e.target;
+      var itemRef = t.getAttribute("data-select-item");
+      var cargaSel = t.getAttribute("data-select-carga");
+      if(itemRef==null && cargaSel==null) return;
+      var rows = applyFilters(getFlatRows());
+      if(itemRef!=null){
+        if(t.checked) selectedItems[itemRef] = true; else delete selectedItems[itemRef];
+      } else {
+        rows.forEach(function(r){
+          if(r.cargaId!==cargaSel) return;
+          var k = r.cargaId+"|"+r.id;
+          if(t.checked) selectedItems[k] = true; else delete selectedItems[k];
+        });
+      }
+      syncSelecaoUI(rows);
+    });
+    $("selecionarTodosConsulta").addEventListener("change", function(e){
+      var rows = applyFilters(getFlatRows());
+      rows.forEach(function(r){
+        var k = r.cargaId+"|"+r.id;
+        if(e.target.checked) selectedItems[k] = true; else delete selectedItems[k];
+      });
+      syncSelecaoUI(rows);
+    });
+    $("btnAplicarStatus").addEventListener("click", aplicarStatusEmMassa);
+    $("btnExpandirTodas").addEventListener("click", function(){
+      applyFilters(getFlatRows()).forEach(function(r){ expandedCargas[r.cargaId] = true; });
+      renderConsulta();
+    });
+    $("btnRecolherTodas").addEventListener("click", function(){
+      expandedCargas = {};
+      renderConsulta();
+    });
+
+    // Fornecedores
+    $("fornecedorForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      var input = $("fnNome");
+      var nome = input.value.trim();
+      if(!nome){ toast("Informe o nome do fornecedor.", true); input.focus(); return; }
+      if(fornecedorExiste(nome)){ toast("Esse fornecedor já está cadastrado.", true); input.select(); return; }
+      registrarFornecedor(nome);
+      saveState();
+      input.value = "";
+      toast("Fornecedor adicionado.");
+      input.focus();
+    });
+    $("fnBusca").addEventListener("input", function(e){
+      fornecedorBusca = e.target.value;
+      renderFornecedoresTab();
+    });
+
+    // Modais
+    document.querySelectorAll("[data-close-modal]").forEach(function(b){ b.addEventListener("click", fecharModais); });
+    document.querySelectorAll(".modal-backdrop").forEach(function(m){
+      m.addEventListener("mousedown", function(e){ if(e.target===m) fecharModais(); });
+    });
+    document.addEventListener("keydown", function(e){
+      if(e.key!=="Escape") return;
+      if(!$("menuBackupDropdown").hidden){ toggleMenuBackup(false); $("btnMenuBackup").focus(); return; }
+      if(algumModalAberto()) fecharModais();
+    });
+    $("editItemForm").addEventListener("submit", function(e){ e.preventDefault(); salvarModalItem(); });
+    $("btnExcluirItem").addEventListener("click", function(){
+      if(editItemRef && excluirItem(editItemRef.cargaId, editItemRef.itemId)) fecharModais();
+    });
+    $("editCargaForm").addEventListener("submit", function(e){ e.preventDefault(); salvarModalCarga(); });
+    $("btnAdicionarItensCarga").addEventListener("click", function(){
+      var cargaId = editCargaRef && editCargaRef.cargaId;
+      if(!cargaId) return;
+      fecharModais();
+      adicionarItensCarga(cargaId);
+    });
+    $("btnExcluirCarga").addEventListener("click", function(){
+      if(editCargaRef && excluirCarga(editCargaRef.cargaId)) fecharModais();
+    });
+
+    // Tema e backup
+    $("btnTema").addEventListener("click", function(){
+      aplicarTema(document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark");
+    });
+    $("btnMenuBackup").addEventListener("click", function(){ toggleMenuBackup(); });
+    $("btnExportarAgora").addEventListener("click", function(){
+      toggleMenuBackup(false);
+      exportar(getFlatRows(), "backup_cargas_FLV.xlsx");
+    });
+    $("inputImportar").addEventListener("change", function(e){
+      var file = e.target.files[0];
+      if(file) importarPlanilha(file);
+      e.target.value = "";
+      toggleMenuBackup(false);
+    });
+
+    // Conexão
+    window.addEventListener("online", setSyncStatus);
+    window.addEventListener("offline", setSyncStatus);
+    window.addEventListener("beforeunload", function(e){
+      if(pendingSyncs>0){ e.preventDefault(); e.returnValue = ""; }
+    });
+  }
+
+  function aplicarPeriodo(r){
+    var hoje = todayISO(), de = "", ate = "";
+    if(r==="hoje"){ de = ate = hoje; }
+    else if(r==="7"){ de = daysAgoISO(6); ate = hoje; }
+    else if(r==="30"){ de = daysAgoISO(29); ate = hoje; }
+    $("fDataDe").value = de;
+    $("fDataAte").value = ate;
+    filters.dataDe = de;
+    filters.dataAte = ate;
+    renderConsulta();
+  }
 
   /* ============ Inicialização ============ */
   function init(){
-    document.getElementById("cgData").value = todayISO();
-    document.getElementById("fDataDe").value = todayISO();
-    document.getElementById("fDataAte").value = todayISO();
-    filters.dataDe = todayISO();
-    filters.dataAte = todayISO();
+    $("itemFields").innerHTML = renderItemFields("it");
+    $("editItemFields").innerHTML = renderItemFields("em");
+    $("statusEmMassa").insertAdjacentHTML("beforeend", STATUS_LIST.map(function(s){ return '<option>'+escapeHtml(s)+'</option>'; }).join(""));
+    $("fTipoCarga").insertAdjacentHTML("beforeend", TIPOS_CARGA.map(function(s){ return '<option>'+escapeHtml(s)+'</option>'; }).join(""));
+    limparFormItem("it");
+    bindEvents();
+    aplicarTema(document.documentElement.getAttribute("data-theme")==="dark" ? "dark" : "light");
+
+    $("cgData").value = todayISO();
+    $("fDataDe").value = $("fDataAte").value = todayISO();
+    filters.dataDe = filters.dataAte = todayISO();
+
     loadState();
     loadDraft();
     renderAll();
 
-    if(configureRemoteSync()){
-      subscribeToRemoteState();
-    }
+    if(configureRemoteSync()) subscribeToRemoteState();
+    setSyncStatus();
   }
 
   init();
